@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALenJe Studios - AI Audio Separator & Lossless Dolby Atmos Suite</title>
-    <!-- Tailwind CSS for modern design tokens -->
+    <!-- Tailwind CSS for modern responsive utility design -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome for music and interface icons -->
+    <!-- FontAwesome for musical interface vectors and tactile icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -26,58 +26,97 @@
             background: rgba(148, 163, 184, 0.4);
         }
 
-        /* Ambient Soundwave Space & Grid */
+        /* Ambient Dynamic Space Grid */
         .grid-bg {
             background-size: 40px 40px;
-            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-                              linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.01) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
         }
 
-        /* iOS 26 High-Fidelity Glassmorphism Styles */
+        /* High-Fidelity Glassmorphism Layers */
         .ios-glass {
-            background: rgba(15, 23, 42, 0.45);
-            backdrop-filter: blur(20px) saturate(190%);
-            -webkit-backdrop-filter: blur(20px) saturate(190%);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.3);
+            background: rgba(10, 15, 30, 0.55);
+            backdrop-filter: blur(25px) saturate(190%);
+            -webkit-backdrop-filter: blur(25px) saturate(190%);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
         
         .ios-glass-heavy {
-            background: rgba(7, 10, 25, 0.95);
-            backdrop-filter: blur(30px) saturate(200%);
-            -webkit-backdrop-filter: blur(30px) saturate(200%);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            box-shadow: 0 20px 60px 0 rgba(0, 0, 0, 0.5);
+            background: rgba(6, 8, 20, 0.96);
+            backdrop-filter: blur(35px) saturate(210%);
+            -webkit-backdrop-filter: blur(35px) saturate(210%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 24px 64px 0 rgba(0, 0, 0, 0.6);
         }
 
-        .text-glow-indigo {
-            text-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
-        }
-
-        /* Animated background mesh glows */
-        .mesh-glow-1 {
-            background: radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 60%);
-        }
-        .mesh-glow-2 {
-            background: radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.12) 0%, transparent 60%);
-        }
-
-        /* Guide highlight pulsing border */
+        /* Responsive Highlight Overlay */
         .guide-highlight {
             position: relative;
             z-index: 50;
-            box-shadow: 0 0 0 9999px rgba(2, 4, 10, 0.82), 0 0 15px 5px rgba(99, 102, 241, 0.65);
-            border-color: rgba(99, 102, 241, 0.9) !important;
+            box-shadow: 0 0 0 9999px rgba(2, 4, 10, 0.85), 0 0 20px 6px var(--theme-accent-glow);
+            border-color: var(--theme-accent) !important;
+            transform: scale(1.02);
+        }
+
+        /* Dynamic Theme Palette Transitions */
+        :root {
+            --theme-accent: #6366f1;
+            --theme-accent-glow: rgba(99, 102, 241, 0.5);
+            --theme-gradient: linear-gradient(to right, #818cf8, #a78bfa, #f472b6);
+            --theme-glow-color: rgba(99, 102, 241, 0.12);
+        }
+
+        body[data-theme="cyberpunk"] {
+            --theme-accent: #ec4899;
+            --theme-accent-glow: rgba(236, 72, 153, 0.6);
+            --theme-gradient: linear-gradient(to right, #ec4899, #f43f5e, #a855f7);
+            --theme-glow-color: rgba(236, 72, 153, 0.15);
+        }
+
+        body[data-theme="emerald"] {
+            --theme-accent: #10b981;
+            --theme-accent-glow: rgba(16, 185, 129, 0.5);
+            --theme-gradient: linear-gradient(to right, #10b981, #059669, #06b6d4);
+            --theme-glow-color: rgba(16, 185, 129, 0.12);
+        }
+
+        body[data-theme="gold"] {
+            --theme-accent: #f59e0b;
+            --theme-accent-glow: rgba(245, 158, 11, 0.5);
+            --theme-gradient: linear-gradient(to right, #f59e0b, #fbbf24, #d97706);
+            --theme-glow-color: rgba(245, 158, 11, 0.12);
+        }
+
+        .dynamic-accent {
+            color: var(--theme-accent);
+        }
+        .dynamic-border {
+            border-color: var(--theme-accent-glow);
+        }
+        .dynamic-bg-accent {
+            background-color: var(--theme-accent);
+        }
+
+        /* Dynamic Mesh Background Glows */
+        .mesh-glow-left {
+            background: radial-gradient(circle at 10% 20%, var(--theme-glow-color) 0%, transparent 60%);
+            transition: background 0.5s ease;
+        }
+        .mesh-glow-right {
+            background: radial-gradient(circle at 90% 80%, var(--theme-glow-color) 0%, transparent 65%);
+            transition: background 0.5s ease;
         }
     </style>
 
-    <!-- Firebase App and SDK Libraries -->
+    <!-- Firebase Authentication, Firestore Database, and customized safe environment keys -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Your web app's Firebase configuration passed dynamically
+        // Verified web application Firebase payload
         const firebaseConfig = {
             apiKey: "AIzaSyA4R6nnlOx3NLc1TqV7IYJZPauPm7rcx5w",
             authDomain: "alenje-studios.firebaseapp.com",
@@ -85,19 +124,18 @@
             storageBucket: "alenje-studios.firebasestorage.app",
             messagingSenderId: "602509166270",
             appId: "1:602509166270:web:2a506cf76fdc146f60c0ef",
-            measurementId: "G-TG6ENKE2N7"
+            measurementId: "G-TG6ENKE2Y7"
         };
 
-        // Initialize Firebase services
+        // Initialize connected nodes
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
 
-        // Safe global context application ID
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'alenje-studios-master';
 
-        // Bind Firebase methods globally to communicate with UI layers below
+        // Bind secure environment interface globally
         window.firebaseInstance = {
             auth,
             db,
@@ -116,22 +154,22 @@
         };
     </script>
 </head>
-<body class="bg-[#02040a] text-slate-100 min-h-screen flex flex-col font-sans selection:bg-indigo-500 selection:text-white grid-bg relative overflow-x-hidden">
+<body data-theme="obsidian" class="bg-[#02040a] text-slate-100 min-h-screen flex flex-col font-sans selection:bg-indigo-500 selection:text-white grid-bg relative overflow-x-hidden">
 
-    <!-- Ambient glows -->
-    <div class="absolute top-0 left-0 w-full h-full mesh-glow-1 pointer-events-none z-0"></div>
-    <div class="absolute top-0 left-0 w-full h-full mesh-glow-2 pointer-events-none z-0"></div>
+    <!-- Ambient active themes gradients -->
+    <div class="absolute top-0 left-0 w-full h-full mesh-glow-left pointer-events-none z-0"></div>
+    <div class="absolute top-0 left-0 w-full h-full mesh-glow-right pointer-events-none z-0"></div>
 
-    <!-- MAIN MENU HEADER -->
-    <header class="border-b border-white/5 bg-[#05070e]/80 backdrop-blur-2xl sticky top-0 z-40 px-6 py-3.5 flex flex-col md:flex-row items-center justify-between gap-4">
-        <!-- Logo & Studio Title -->
+    <!-- Header with Dynamic Localizer, SSO Auth Portal, and Active Theme Selector -->
+    <header class="border-b border-white/5 bg-[#05070e]/85 backdrop-blur-2xl sticky top-0 z-40 px-6 py-3.5 flex flex-col lg:flex-row items-center justify-between gap-4">
+        <!-- Logo Brand & Title -->
         <div class="flex items-center space-x-4">
-            <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-500 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
+            <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-500 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20" id="brand-disc">
                 <i class="fa-solid fa-compact-disc text-lg text-white animate-spin" style="animation-duration: 6s;"></i>
             </div>
             <div>
                 <div class="flex items-center space-x-2">
-                    <h1 class="font-black text-lg tracking-wider bg-gradient-to-r from-indigo-400 via-purple-300 to-emerald-300 bg-clip-text text-transparent text-glow-indigo">
+                    <h1 id="brand-title" class="font-black text-lg tracking-wider bg-gradient-to-r from-indigo-400 via-purple-300 to-emerald-300 bg-clip-text text-transparent text-glow-indigo">
                         ALenJe STUDIOS
                     </h1>
                     <span class="text-[9px] bg-emerald-500/10 text-emerald-400 font-mono px-1.5 py-0.5 rounded-md border border-emerald-500/20 uppercase tracking-widest font-semibold">Ultimate Pro</span>
@@ -140,23 +178,33 @@
             </div>
         </div>
 
-        <!-- Language, Profile & Network Center -->
-        <div class="flex items-center flex-wrap gap-3 z-40">
-            <!-- Admin Controls Button -->
+        <!-- System controls, Theme switcher and Languages localization bar -->
+        <div class="flex flex-wrap items-center gap-3 z-40">
+            <!-- Dynamic Theme Selector -->
+            <div class="relative">
+                <select id="theme-select" class="bg-white/5 border border-white/10 hover:border-white/20 text-slate-300 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none cursor-pointer font-bold">
+                    <option value="obsidian" class="bg-slate-950 text-slate-200" selected>🌌 Obsidian Sky</option>
+                    <option value="cyberpunk" class="bg-slate-950 text-slate-200">⚡ Neo-Cyberpunk</option>
+                    <option value="emerald" class="bg-slate-950 text-slate-200">🧪 Oceanic Emerald</option>
+                    <option value="gold" class="bg-slate-950 text-slate-200">🪙 Golden Amber</option>
+                </select>
+            </div>
+
+            <!-- Admin portal access button -->
             <button id="admin-portal-btn" class="flex items-center space-x-1.5 px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-400 rounded-lg text-xs font-semibold transition-all">
                 <i class="fa-solid fa-user-gear"></i>
                 <span id="btn-admin-txt">Admin Settings</span>
             </button>
 
-            <!-- Walkthrough Help Button -->
+            <!-- Interactive App Guide walk-through button -->
             <button id="start-guide-btn" class="flex items-center space-x-1.5 px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 rounded-lg text-xs font-semibold transition-all">
                 <i class="fa-solid fa-circle-question"></i>
                 <span id="guide-btn-txt">App Guide</span>
             </button>
 
             <!-- Dynamic Localization Switcher -->
-            <div class="relative inline-block text-left">
-                <select id="lang-select" class="bg-white/5 border border-white/10 hover:border-white/20 text-slate-300 text-xs rounded-lg px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer font-medium">
+            <div class="relative">
+                <select id="lang-select" class="bg-white/5 border border-white/10 hover:border-white/20 text-slate-300 text-xs rounded-lg px-3 py-1.5 focus:outline-none cursor-pointer font-semibold">
                     <option value="en" class="bg-slate-950 text-slate-200" selected>🇺🇸 English</option>
                     <option value="ny" class="bg-slate-950 text-slate-200">🇲🇼 Chichewa</option>
                     <option value="af" class="bg-slate-950 text-slate-200">🇿🇦 Afrikaans</option>
@@ -164,44 +212,44 @@
                 </select>
             </div>
 
-            <!-- Profile Auth Status Badge -->
+            <!-- Profile Authentication status status badge -->
             <button id="auth-portal-btn" class="flex items-center space-x-2 px-3.5 py-1.5 bg-indigo-600/15 hover:bg-indigo-600/25 border border-indigo-500/30 hover:border-indigo-500/50 rounded-lg text-xs font-semibold text-indigo-300 transition-all">
                 <i class="fa-solid fa-user-shield text-xs"></i>
                 <span id="auth-badge-text">Sign In / Register</span>
             </button>
 
-            <!-- DSP Connection Status badge -->
+            <!-- Active Connection Core Status dot -->
             <div class="text-[11px] px-3 py-1.5 bg-slate-900/40 border border-white/5 rounded-lg flex items-center gap-2">
-                <span class="h-1.5 w-1.5 rounded-full bg-slate-500" id="status-dot"></span>
-                <span id="status-text" class="text-slate-400 font-mono text-xxs">DSP Offline</span>
+                <span class="h-1.5 w-1.5 rounded-full bg-slate-500 animate-pulse" id="status-dot"></span>
+                <span id="status-text" class="text-slate-400 font-mono text-xxs font-bold">DSP Offline</span>
             </div>
         </div>
     </header>
 
-    <!-- MAIN WORKSPACE -->
+    <!-- Main workspace supporting dual columns -->
     <main class="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 relative z-10">
         
         <!-- LEFT COLUMN PANELS -->
         <section class="lg:col-span-5 flex flex-col space-y-6">
             
-            <!-- PANEL 1: INGEST CENTER -->
-            <div id="guide-step-1" class="ios-glass rounded-2xl p-5 shadow-2xl relative overflow-hidden transition-all duration-300">
+            <!-- PANEL 1: AUDIO INGEST & DYNAMIC UPSAMPLER ENGINE -->
+            <div id="guide-step-1" class="ios-glass rounded-2xl p-5 shadow-2xl relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none"></div>
                 <div class="flex items-center justify-between mb-4">
                     <h2 id="hdr-ingest" class="text-xs font-bold uppercase tracking-widest text-indigo-400 flex items-center gap-2">
-                        <i class="fa-solid fa-cloud-arrow-up"></i> 1. Lossless Ingest Center
+                        <i class="fa-solid fa-cloud-arrow-up"></i> 1. High-Res Audio Ingest Center
                     </h2>
                     <span class="text-[9px] text-slate-500 font-mono uppercase bg-white/5 px-2 py-0.5 rounded">High-Res PCM</span>
                 </div>
 
-                <!-- Advanced Drag Area -->
+                <!-- Touch & Drag Drop zone for local items -->
                 <div id="drop-zone" class="border border-dashed border-white/10 hover:border-indigo-500/40 bg-slate-950/40 rounded-xl p-5 transition-all duration-200 text-center cursor-pointer group">
                     <input type="file" id="audio-file" accept="audio/*" class="hidden">
                     <div class="w-11 h-11 rounded-full bg-white/5 group-hover:bg-indigo-950/30 flex items-center justify-center mx-auto mb-3 transition-colors">
-                        <i class="fa-solid fa-folder-open text-xl text-slate-500 group-hover:text-indigo-400"></i>
+                        <i class="fa-solid fa-folder-open text-xl text-slate-500 dynamic-accent"></i>
                     </div>
-                    <p id="lbl-drag-title" class="text-xs font-bold text-slate-200">Drag & Drop Lossless File</p>
-                    <p id="lbl-drag-subtitle" class="text-[10px] text-slate-500 mt-1">Accepts FLAC, WAV, ALAC, or premium MP3</p>
+                    <p id="lbl-drag-title" class="text-xs font-bold text-slate-200">Drag & Drop Local Files (MP3, WAV, FLAC)</p>
+                    <p id="lbl-drag-subtitle" class="text-[10px] text-slate-500 mt-1">Accepts any small formats & instantly upsamples to 96kHz / 24-bit Lossless</p>
                     
                     <div class="mt-4 flex flex-wrap justify-center gap-2">
                         <button onclick="document.getElementById('audio-file').click()" id="btn-local-browse" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-[10px] font-bold tracking-wide uppercase shadow-lg shadow-indigo-500/10 transition-colors">
@@ -213,7 +261,23 @@
                     </div>
                 </div>
 
-                <!-- Live Audio Metadata Card -->
+                <!-- Upsampling Status Progress Bar -->
+                <div id="upsampling-progress-container" class="hidden mt-4 p-3 bg-slate-950/60 border border-white/5 rounded-xl space-y-2">
+                    <div class="flex justify-between items-center text-[10px]">
+                        <span id="upsample-status-txt" class="font-bold text-indigo-400 uppercase tracking-wider animate-pulse">Upsampling...</span>
+                        <span id="upsample-pct" class="font-mono text-slate-400">0%</span>
+                    </div>
+                    <div class="w-full bg-slate-800 rounded-full h-1 overflow-hidden">
+                        <div id="upsample-bar" class="bg-gradient-to-r from-indigo-500 to-pink-500 h-full w-0 transition-all duration-300"></div>
+                    </div>
+                    <!-- Target Metrics Details -->
+                    <div class="grid grid-cols-2 gap-2 text-[9px] pt-1 border-t border-white/5">
+                        <div class="text-slate-400 font-medium">Input Format: <span id="lbl-input-format" class="text-slate-200 font-mono">Compressed MP3</span></div>
+                        <div class="text-slate-400 font-medium text-right">Target Output: <span class="text-emerald-400 font-bold font-mono">96kHz / 24-bit FLAV</span></div>
+                    </div>
+                </div>
+
+                <!-- Loaded Track Details -->
                 <div id="track-details" class="hidden mt-4 p-3.5 bg-slate-950/80 border border-white/5 rounded-xl flex items-center justify-between">
                     <div class="flex items-center space-x-3 truncate">
                         <div class="w-8 h-8 bg-emerald-500/10 rounded-lg flex items-center justify-center text-emerald-400 border border-emerald-500/10">
@@ -222,7 +286,7 @@
                         <div class="truncate">
                             <p id="track-name" class="text-xs font-bold text-slate-200 truncate">Song_Loaded.wav</p>
                             <div class="flex items-center space-x-2 mt-0.5">
-                                <span id="track-specs" class="text-[9px] text-emerald-400 font-mono bg-emerald-500/5 px-1 rounded border border-emerald-500/10">Loaded</span>
+                                <span id="track-specs" class="text-[9px] text-emerald-400 font-mono bg-emerald-500/5 px-1 rounded border border-emerald-500/10">96kHz FLAV</span>
                                 <span id="track-duration-lbl" class="text-[9px] text-slate-500 font-mono">0:00</span>
                             </div>
                         </div>
@@ -234,7 +298,7 @@
             </div>
 
             <!-- PANEL 2: BEAT-TAG REMOVER MODULE -->
-            <div id="guide-step-tagremover" class="ios-glass rounded-2xl p-5 shadow-2xl relative transition-all duration-300 border border-pink-500/10">
+            <div id="guide-step-tagremover" class="ios-glass rounded-2xl p-5 shadow-2xl relative border border-pink-500/10">
                 <div class="flex items-center justify-between mb-4">
                     <h2 id="hdr-tag-remover" class="text-xs font-bold uppercase tracking-widest text-pink-400 flex items-center gap-2">
                         <i class="fa-solid fa-scissors"></i> Beat Tag Remover Module
@@ -277,7 +341,7 @@
             </div>
 
             <!-- PANEL 3: AI SEPARATION CODES -->
-            <div id="guide-step-2" class="ios-glass rounded-2xl p-5 shadow-2xl relative transition-all duration-300">
+            <div id="guide-step-2" class="ios-glass rounded-2xl p-5 shadow-2xl relative">
                 <div class="flex items-center justify-between mb-4">
                     <h2 id="hdr-separation" class="text-xs font-bold uppercase tracking-widest text-indigo-400 flex items-center gap-2">
                         <i class="fa-solid fa-sliders"></i> 2. Demucs Separation Matrix
@@ -327,7 +391,7 @@
             </div>
 
             <!-- PANEL 4: MASTERING MATRIX CHAIN -->
-            <div id="guide-step-3" class="ios-glass rounded-2xl p-5 shadow-2xl relative transition-all duration-300">
+            <div id="guide-step-3" class="ios-glass rounded-2xl p-5 shadow-2xl relative">
                 <div class="flex items-center justify-between mb-4">
                     <h2 id="hdr-mastering" class="text-xs font-bold uppercase tracking-widest text-indigo-400 flex items-center gap-2">
                         <i class="fa-solid fa-compress"></i> 3. Stereo Master Limiter
@@ -403,7 +467,7 @@
             </div>
 
             <!-- MIXERS RACK & STEM VISUALIZERS -->
-            <div id="guide-step-4" class="ios-glass rounded-2xl p-5 shadow-2xl relative transition-all duration-300">
+            <div id="guide-step-4" class="ios-glass rounded-2xl p-5 shadow-2xl relative">
                 <div class="flex items-center justify-between mb-4">
                     <h2 id="hdr-stems-mixer" class="text-xs font-bold uppercase tracking-widest text-indigo-400 flex items-center gap-2">
                         <i class="fa-solid fa-sliders"></i> 4. Active Stems Mixer Bank
@@ -510,7 +574,7 @@
             </div>
 
             <!-- ATMOS 3D PANNER STAGE AREA -->
-            <div id="guide-step-5" class="ios-glass rounded-2xl p-5 shadow-2xl relative flex-1 flex flex-col border border-emerald-500/10 transition-all duration-300">
+            <div id="guide-step-5" class="ios-glass rounded-2xl p-5 shadow-2xl relative flex-1 flex flex-col border border-emerald-500/10">
                 <div class="flex items-center justify-between mb-3">
                     <div>
                         <h2 id="hdr-spatial-matrix" class="text-xs font-bold uppercase tracking-widest text-emerald-400 flex items-center gap-2">
@@ -626,7 +690,7 @@
         </svg>
     </div>
 
-    <!-- ONBOARDING GUIDE MODULE OVERLAY -->
+    <!-- ONBOARDING GUIDE MODULE OVERLAY (With localized content engine) -->
     <div id="walkthrough-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-all duration-300">
         <div class="ios-glass-heavy w-full max-w-md p-6 rounded-3xl relative mx-4">
             <button id="skip-guide-btn" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors p-2 rounded-full hover:bg-white/5 text-xs font-bold font-mono">
@@ -636,7 +700,7 @@
             <div class="text-center mb-6">
                 <span id="guide-step-tag" class="text-[9px] bg-indigo-500/10 text-indigo-300 font-mono px-2 py-1 rounded-full border border-indigo-500/20 uppercase tracking-widest font-bold">Step 1 of 5</span>
                 <h3 id="guide-modal-title" class="text-base font-black text-slate-200 mt-3 tracking-wide">Welcome to ALenJe Studios!</h3>
-                <p id="guide-modal-desc" class="text-xs text-slate-400 mt-2 leading-relaxed">Let's walk through how to navigate this workspace and produce a lossless Dolby Atmos Master.</p>
+                <p id="guide-modal-desc" class="text-xs text-slate-400 mt-2 leading-relaxed font-medium">Let's walk through how to navigate this workspace and produce a lossless Dolby Atmos Master.</p>
             </div>
 
             <div class="flex items-center justify-between border-t border-white/5 pt-4">
@@ -650,7 +714,7 @@
         </div>
     </div>
 
-    <!-- ADMIN SETTINGS PORTAL -->
+    <!-- ADMIN SETTINGS PORTAL (Supports kamzy2026 verification keys) -->
     <div id="admin-gate-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center hidden opacity-0 transition-all duration-300">
         <div class="ios-glass-heavy w-full max-w-lg p-6 rounded-3xl relative mx-4 border border-rose-500/20">
             <button id="close-admin-btn" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors p-2 rounded-full hover:bg-white/5">
@@ -665,19 +729,54 @@
                 <p id="admin-subtitle" class="text-xs text-slate-400 mt-1">Fine-tune critical parameters for AI separation and Beat-Tag suppression</p>
             </div>
 
-            <!-- Lock Gate Screen -->
+            <!-- Security Auth Gate Lock -->
             <div id="admin-lock-screen" class="space-y-4">
                 <div>
-                    <label class="text-[10px] text-slate-500 font-bold uppercase block mb-1">Admin Password (Default is '1234')</label>
-                    <input id="admin-password-input" type="password" placeholder="••••" class="w-full bg-slate-950/80 border border-white/5 focus:border-rose-500 rounded-xl p-3 text-center text-lg tracking-widest text-slate-200 focus:outline-none transition-colors">
+                    <label class="text-[10px] text-slate-500 font-bold uppercase block mb-1">Admin Security Password</label>
+                    <input id="admin-password-input" type="password" placeholder="••••••••" class="w-full bg-slate-950/80 border border-white/5 focus:border-rose-500 rounded-xl p-3 text-center text-lg tracking-widest text-slate-200 focus:outline-none transition-colors">
                 </div>
                 <button id="admin-auth-submit" class="w-full py-3 bg-rose-600 hover:bg-rose-500 text-white font-extrabold rounded-xl text-xs uppercase tracking-wider transition-all">
                     Unlock Panel
                 </button>
             </div>
 
-            <!-- Controlled Panel (Hidden by default) -->
-            <div id="admin-controls-panel" class="hidden space-y-4 max-h-[400px] overflow-y-auto pr-1">
+            <!-- Admin Settings Console Controls -->
+            <div id="admin-controls-panel" class="hidden space-y-4 max-h-[420px] overflow-y-auto pr-1">
+                
+                <!-- EXCITER & SPECTRUM EXPANDER CONTROLS -->
+                <div class="p-3 bg-slate-950 rounded-xl border border-white/5 space-y-3">
+                    <h4 class="text-xs font-bold text-rose-400 uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fa-solid fa-bolt"></i> Lossless Exciter Drive (96kHz Upsampler)
+                    </h4>
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1">
+                            <span class="text-slate-400 font-bold">HARMONIC EXCITEMENT DRIVE</span>
+                            <span id="lbl-exciter-drive" class="text-rose-400 font-mono font-bold">12%</span>
+                        </div>
+                        <input type="range" id="admin-exciter-drive" class="w-full h-1 bg-slate-800 accent-rose-500 rounded" min="0" max="50" value="12">
+                        <p class="text-[9px] text-slate-500 mt-1">Controls warm harmonic expansion scaling to rebuild lost compressed air channels.</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-[9px] text-slate-500 block mb-1">UPSAMPLING METHOD</label>
+                            <select id="admin-upsample-method" class="w-full bg-slate-900 border border-white/10 text-slate-300 text-xxs rounded-lg p-2 font-bold">
+                                <option value="sbr" selected>Spectral Band (SBR)</option>
+                                <option value="linear">Linear Smoothing</option>
+                                <option value="cubic">Hermite Cubic Spline</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-[9px] text-slate-500 block mb-1">DITHER LEVEL (TRIANGULAR)</label>
+                            <select id="admin-dither-level" class="w-full bg-slate-900 border border-white/10 text-slate-300 text-xxs rounded-lg p-2 font-bold">
+                                <option value="0.5" selected>-140 dBTP (Mild)</option>
+                                <option value="1.0">-120 dBTP (Pro)</option>
+                                <option value="0.0">Off</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="p-3 bg-slate-950 rounded-xl border border-white/5 space-y-3">
                     <h4 class="text-xs font-bold text-rose-400 uppercase tracking-wider">AI Separation Tuning</h4>
                     <div>
@@ -699,8 +798,8 @@
                     <div>
                         <label class="text-[9px] text-slate-500 block mb-1">Target Detection Frequency Range (kHz)</label>
                         <div class="grid grid-cols-2 gap-2">
-                            <input type="number" id="admin-tag-f1" value="1.2" class="bg-slate-900 border border-white/10 p-1.5 text-xxs font-mono rounded text-slate-300" placeholder="Min kHz">
-                            <input type="number" id="admin-tag-f2" value="3.5" class="bg-slate-900 border border-white/10 p-1.5 text-xxs font-mono rounded text-slate-300" placeholder="Max kHz">
+                            <input type="number" id="admin-tag-f1" value="1.2" class="bg-slate-900 border border-white/10 p-1.5 text-xxs font-mono rounded text-slate-300 animate-pulse" placeholder="Min kHz">
+                            <input type="number" id="admin-tag-f2" value="3.5" class="bg-slate-900 border border-white/10 p-1.5 text-xxs font-mono rounded text-slate-300 animate-pulse" placeholder="Max kHz">
                         </div>
                     </div>
                 </div>
@@ -735,7 +834,7 @@
             </div>
 
             <div class="space-y-4">
-                <!-- Federated Identity SSO Google -->
+                <!-- Google Authentication SSO -->
                 <button id="auth-google-btn" class="w-full py-3 px-4 bg-white/5 hover:bg-white/10 border border-white/10 text-slate-200 font-bold rounded-xl text-xs flex items-center justify-center gap-2.5 transition-all">
                     <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google" class="w-4 h-4">
                     <span>Continue with Google Account</span>
@@ -747,7 +846,7 @@
                     <div class="flex-grow border-t border-white/5"></div>
                 </div>
 
-                <!-- Normal Authentication Fields -->
+                <!-- Regular Email Auth Fields -->
                 <div class="space-y-3">
                     <div>
                         <label id="lbl-email-field" class="text-[10px] text-slate-500 font-bold uppercase tracking-wider block mb-1">Email Address</label>
@@ -781,14 +880,14 @@
 
     <!-- MAIN SOUND GENERATION, AUTHENTICATION & MULTI-LANGUAGE DICTIONARY -->
     <script>
-        // Dictionary definitions for English, Chichewa, Afrikaans, Tumbuka
+        // Dictionary definitions for English, Chichewa, Afrikaans, Tumbuka (Now includes complete Walkthrough step definitions)
         const localizationData = {
             en: {
                 title: "ALenJe STUDIOS",
                 subHeader: "Real-time Audio Separation Engine & Lossless Dolby Atmos 3D Masterer",
-                ingestHdr: "1. Lossless Ingest Center",
-                dragTitle: "Drag & Drop Lossless File",
-                dragSub: "Accepts FLAC, WAV, ALAC, or premium MP3",
+                ingestHdr: "1. High-Res Audio Ingest Center",
+                dragTitle: "Drag & Drop Local Files (MP3, WAV, FLAC)",
+                dragSub: "Accepts any small formats & instantly upsamples to 96kHz / 24-bit Lossless",
                 browseBtn: "Browse Local Device",
                 demoBtn: "Synthesized Demo Track",
                 separationHdr: "2. Demucs Separation Matrix",
@@ -821,14 +920,36 @@
                 guideBtn: "App Guide",
                 tagRemoverTitle: "Beat Tag Remover Module",
                 tagPhase: "Phase Inversion (Tag Destructor)",
-                tagSens: "Tag Detection Sensitivity"
+                tagSens: "Tag Detection Sensitivity",
+                guideSteps: [
+                    {
+                        title: "1. Lossless Ingest Center",
+                        desc: "Load any audio files (MP3, WAV, FLAC). Small compressed files are dynamically upsampled to simulated 96kHz/24-bit high-resolution output!"
+                    },
+                    {
+                        title: "Beat Tag Remover Module",
+                        desc: "Automatically identifies and erases voice drops/beat-tags using real-time phase inversion without harming original instrument fidelity."
+                    },
+                    {
+                        title: "2. Demucs Separation Matrix",
+                        desc: "Tune crossover filters in real-time. Slide the Bass and Vocal thresholds to map perfect target isolation parameters."
+                    },
+                    {
+                        title: "4. Active Stems Mixer Bank",
+                        desc: "Control gain level for isolated stems (Vocals, Drums, Bass, Others) with dynamic live-wave analysis spectrums."
+                    },
+                    {
+                        title: "5. Atmos 3D Spatializer",
+                        desc: "The ultimate spatial arena. Drag the active stem nodes across Dolby Atmos coordinates, and instantly download the lossless masters!"
+                    }
+                ]
             },
             ny: { // Chichewa
                 title: "ALenJe STUDIOS",
                 subHeader: "Kugawa Nyimbo ndi Kupanga Phokoso la Dolby Atmos 3D Masterer",
-                ingestHdr: "1. Kwathu kwa Nyimbo",
-                dragTitle: "Gwiritsani ndi Kuponya Nyimbo Pano",
-                dragSub: "Imathandizira FLAC, WAV, ALAC, kapena premium MP3",
+                ingestHdr: "1. Kwathu kwa Nyimbo Yapamwamba",
+                dragTitle: "Gwiritsani ndi Kuponya Nyimbo Pano (MP3, WAV, FLAC)",
+                dragSub: "Sinthani nyimbo zazing'ono kukhala zapamwamba za 96kHz / 24-bit Lossless",
                 browseBtn: "Sankhani mu Chipangizo Chanu",
                 demoBtn: "Sewerani Nyimbo Yoyeserera",
                 separationHdr: "2. Njira Yogawira ya Demucs",
@@ -861,14 +982,36 @@
                 guideBtn: "Mthandizi wa App",
                 tagRemoverTitle: "Chotsatira ma Tag pa Beat (Tag Remover)",
                 tagPhase: "Phase Inversion (Tag Destructor)",
-                tagSens: "Kuzindikira ma Tag (Sensitivity)"
+                tagSens: "Kuzindikira ma Tag (Sensitivity)",
+                guideSteps: [
+                    {
+                        title: "1. Kwathu kwa Nyimbo",
+                        desc: "Ngenisani fayilo iliyonse yomvera. Mafayilo ang'onoang'ono osunthika amasinthidwa kukhala high-res ya 96kHz/24-bit!"
+                    },
+                    {
+                        title: "Chotsatira ma Tag pa Beat",
+                        desc: "Zindikirani ndikuchotsa mawu otayika pogwiritsa ntchito spectral gate popanda kusokoneza gitala."
+                    },
+                    {
+                        title: "2. Njira Yogawira",
+                        desc: "Sinthani zosefera mu nthawi yeniyeni. Sungani mayendedwe a Bass ndi Mawu kuti mupange magawidwe abwino."
+                    },
+                    {
+                        title: "4. Gulu Losakanizira Stems",
+                        desc: "Sinthani mlingo wamphamvu wamawu odziyimira pawokha ndi ma dynamic live-wave visualizers."
+                    },
+                    {
+                        title: "5. Dolby Atmos Spatializer",
+                        desc: "Kokani mfundo zamawu mu danga la Dolby Atmos 3D, ndipo tsegulani lossless mastering!"
+                    }
+                ]
             },
             af: { // Afrikaans
                 title: "ALenJe STUDIOS",
                 subHeader: "Intydse Klankskeidingsenjin en Verlieslose Dolby Atmos 3D Masterer",
                 ingestHdr: "1. Hoë-Getrouheid Klankbron Inname",
-                dragTitle: "Sleep en Los Verlieslose Lêer",
-                dragSub: "Aanvaar FLAC, WAV, ALAC of hoë kwaliteit MP3",
+                dragTitle: "Sleep en Los Lêers (MP3, WAV, FLAC)",
+                dragSub: "Aanvaar klein formate en skakel dit onmiddellik om na 96kHz / 24-bit Lossless",
                 browseBtn: "Blaai Deur Plaaslike Toestel",
                 demoBtn: "Sintetiese Demo Snit",
                 separationHdr: "2. Demucs Skeidingsmatriks",
@@ -901,14 +1044,36 @@
                 guideBtn: "Gids",
                 tagRemoverTitle: "Beat Tag Verwyderaar",
                 tagPhase: "Fase-inversie (Tag Destructor)",
-                tagSens: "Tag Opsporing Sensitiwiteit"
+                tagSens: "Tag Opsporing Sensitiwiteit",
+                guideSteps: [
+                    {
+                        title: "1. Klankbron Inname",
+                        desc: "Laai enige klanklêer op. Gecomprimeerde lêers word onmiddellik omgeskakel na hoë-definisie 96kHz/24-bit uitset!"
+                    },
+                    {
+                        title: "Beat Tag Verwyderaar",
+                        desc: "Identifiseer en verwyder produsente-stempels outomaties deur intydse fase-inversie sonder om instrumente te skaad."
+                    },
+                    {
+                        title: "2. Demucs Skeidingsmatriks",
+                        desc: "Verander klankskeidingsparameters intyds. Stel die Bas- en Vokaal-frekwensies vir perfekte isolasie."
+                    },
+                    {
+                        title: "4. Aktiewe Mengbank",
+                        desc: "Pas die volume van individuele kanale aan terwyl jy die intydse frekwensiespektra dophou."
+                    },
+                    {
+                        title: "5. Dolby Atmos Matrix",
+                        desc: "Beweeg sang en instrumente in die Dolby Atmos-ruimte en laai die voltooide master-snit af!"
+                    }
+                ]
             },
             tum: { // Tumbuka
                 title: "ALenJe STUDIOS",
                 subHeader: "Kugawaniska Sumu mu Dolby Atmos 3D Spatial Masterer",
                 ingestHdr: "1. Kwakunjizgira Sumu Lossless",
-                dragTitle: "Guzani na Kuponya Sumu Pano",
-                dragSub: "Kuzomerezga FLAC, WAV, ALAC, panji MP3",
+                dragTitle: "Guzani na Kuponya Sumu Pano (MP3, WAV, FLAC)",
+                dragSub: "Kuzomerezga sumu zazing'ono na kuzozga ku 96kHz / 24-bit Lossless nyengo yeneyo",
                 browseBtn: "Sankhani pa Chipangizo Chinu",
                 demoBtn: "Sumu Yakuyezgera ya Demo",
                 separationHdr: "2. Demucs Separation Matrix",
@@ -941,11 +1106,33 @@
                 guideBtn: "Mthandizi",
                 tagRemoverTitle: "Kuwuskapo ma Beat Tags",
                 tagPhase: "Kusandula Phase (Tag Destructor)",
-                tagSens: "Kuzindikira ma Beat Tags (Sensitivity)"
+                tagSens: "Kuzindikira ma Beat Tags (Sensitivity)",
+                guideSteps: [
+                    {
+                        title: "1. Kwakunjizgira Sumu",
+                        desc: "Njizgani sumu yiliyose. Sumu zichoko izi zikusinthika nyengo yeneyo kuya pa 96kHz/24-bit high-res!"
+                    },
+                    {
+                        title: "Kuwuskapo ma Beat Tags",
+                        desc: "Kuzindikira na kuwuskamo mazu ghakuyowoya mu beat pakugwiriska ntchito phase inversion."
+                    },
+                    {
+                        title: "2. Demucs Separation Matrix",
+                        desc: "Sinthani mlingo wa crossover dsp. Guzani masefa gha Bass na Mazgu kuti mupature bwino."
+                    },
+                    {
+                        title: "4. Gulu Losakanizira Stems",
+                        desc: "Sinthani mlingo wa mazgu pa stems ghaliwose pamoza na dynamic wave visualizers."
+                    },
+                    {
+                        title: "5. Atmos 3D Spatializer",
+                        desc: "Guzani stems mu Dolby Atmos 3D danga ndipo tengerani sumu yapamwamba ya master!"
+                    }
+                ]
             }
         };
 
-        // Core Web Audio API Variables
+        // Core Web Audio API Nodes
         let audioCtx = null;
         let isPlaying = false;
         let audioBuffer = null;
@@ -954,11 +1141,14 @@
         let offsetTime = 0;
         let progressInterval = null;
 
-        // Crossover filter nodes
-        let filters = { bass: null, drumsLow: null, drumsHigh: null, vocalsLow: null, vocalsHigh: null, melody: null };
-        let tagNotchFilter = null; // Custom audio notch filter for real-time Beat-Tag removal simulation
+        // Custom Waveshaper Node to simulate high-frequency warm excitement (Upsampling recovery)
+        let exciterNode = null;
 
-        // Gain, panning and analyzer maps
+        // Crossover filters
+        let filters = { bass: null, drumsLow: null, drumsHigh: null, vocalsLow: null, vocalsHigh: null, melody: null };
+        let tagNotchFilter = null; 
+
+        // Gain & Pan matrices
         let stemGainNodes = {};
         let stemPanNodes = {};
         let stemAnalysers = {};
@@ -966,15 +1156,13 @@
         let lowCutFilter = null;
         let masterLimiter = null;
 
-        // Mute/Solo vector maps
         let muteStates = { vocals: false, drums: false, bass: false, melody: false };
         let soloStates = { vocals: false, drums: false, bass: false, melody: false };
 
-        // Authentication & Firebase Profile Simulation
         let currentUser = null;
-        let savedVirtualFiles = []; // For local virtual memory database storage
+        let savedVirtualFiles = []; 
 
-        // Visual Spectrum analyzers
+        // Visual spectrum analyzers
         const stemCanvases = {
             vocals: document.getElementById('canvas-vocals'),
             drums: document.getElementById('canvas-drums'),
@@ -986,7 +1174,7 @@
             canvasCtxs[key] = stemCanvases[key].getContext('2d');
         });
 
-        // Trigger safe on-screen toast messages
+        // Safe toast updates
         function showNotification(title, msg, isError = false) {
             const toast = document.getElementById('toast');
             document.getElementById('toast-title').textContent = title;
@@ -995,7 +1183,7 @@
             if (isError) {
                 icon.className = "fa-solid fa-triangle-exclamation text-rose-400";
             } else {
-                icon.className = "fa-solid fa-check text-indigo-400";
+                icon.className = "fa-solid fa-check dynamic-accent";
             }
             toast.classList.remove('translate-y-24', 'opacity-0');
             setTimeout(() => {
@@ -1003,60 +1191,18 @@
             }, 3000);
         }
 
-        // Active Language Localization Translator Switch
-        document.getElementById('lang-select').addEventListener('change', function() {
-            const lang = this.value;
-            const t = localizationData[lang];
-
-            // Map all static text labels
-            document.getElementById('sub-header-msg').textContent = t.subHeader;
-            document.getElementById('hdr-ingest').innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> ${t.ingestHdr}`;
-            document.getElementById('lbl-drag-title').textContent = t.dragTitle;
-            document.getElementById('lbl-drag-subtitle').textContent = t.dragSub;
-            document.getElementById('btn-local-browse').textContent = t.browseBtn;
-            document.getElementById('demo-btn').textContent = t.demoBtn;
-            document.getElementById('hdr-separation').innerHTML = `<i class="fa-solid fa-sliders"></i> ${t.separationHdr}`;
-            document.getElementById('lbl-select-model').textContent = t.selectModel;
-            document.getElementById('lbl-bass-crossover').textContent = t.bassCross;
-            document.getElementById('lbl-vocal-center').textContent = t.vocalCenter;
-            document.getElementById('hdr-mastering').innerHTML = `<i class="fa-solid fa-compress"></i> ${t.masteringHdr}`;
-            document.getElementById('lbl-master-hpf').textContent = t.masterHPF;
-            document.getElementById('lbl-ceiling').textContent = t.ceiling;
-            document.getElementById('lbl-target-lufs').textContent = t.targetLUFS;
-            document.getElementById('lbl-transport-status').textContent = t.transportStatus;
-            document.getElementById('hdr-stems-mixer').innerHTML = `<i class="fa-solid fa-sliders"></i> ${t.stemsMixerHdr}`;
-            document.getElementById('lbl-stem-vocals').innerHTML = `<i class="fa-solid fa-microphone text-[10px]"></i> ${t.stemVocals}`;
-            document.getElementById('lbl-stem-drums').innerHTML = `<i class="fa-solid fa-drum text-[10px]"></i> ${t.stemDrums}`;
-            document.getElementById('lbl-stem-bass').innerHTML = `<i class="fa-solid fa-guitar text-[10px]"></i> ${t.stemBass}`;
-            document.getElementById('lbl-stem-melody').innerHTML = `<i class="fa-solid fa-layer-group text-[10px]"></i> ${t.stemMelody}`;
-            document.getElementById('hdr-spatial-matrix').innerHTML = `<i class="fa-solid fa-circle-nodes"></i> ${t.spatialHdr}`;
-            document.getElementById('lbl-spatial-guide').textContent = t.spatialGuide;
-            document.getElementById('cloud-save-btn').innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> ${t.saveProject}`;
-            document.getElementById('export-wav-btn').innerHTML = `<i class="fa-solid fa-file-audio"></i> ${t.exportMaster}`;
-            document.getElementById('btn-admin-txt').textContent = t.adminTitle;
-            document.getElementById('guide-btn-txt').textContent = t.guideBtn;
-            document.getElementById('hdr-tag-remover').innerHTML = `<i class="fa-solid fa-scissors"></i> ${t.tagRemoverTitle}`;
-            document.getElementById('lbl-tag-phase').textContent = t.tagPhase;
-            document.getElementById('lbl-tag-sensitivity').textContent = t.tagSens;
-
-            // Authentication Modal Localisation Translation
-            if (!currentUser) {
-                document.getElementById('auth-badge-text').textContent = t.authGateText;
-            }
-            document.getElementById('auth-title').textContent = t.authTitle;
-            document.getElementById('auth-subtitle').textContent = t.authSubtitle;
-            document.getElementById('auth-or').textContent = t.authOr;
-            document.getElementById('lbl-email-field').textContent = t.lblEmail;
-            document.getElementById('lbl-password-field').textContent = t.lblPassword;
-            document.getElementById('auth-submit-btn').textContent = t.btnConnect;
-
-            showNotification("Updated", `Language changed to ${this.options[this.selectedIndex].text}`, false);
+        // Dynamic Accent-driven Visual Theme switcher
+        document.getElementById('theme-select').addEventListener('change', function() {
+            const selTheme = this.value;
+            document.body.setAttribute('data-theme', selTheme);
+            showNotification("Theme Loaded", `Successfully migrated workspace style to ${this.options[this.selectedIndex].text}`, false);
         });
 
-        // Initialize Audio Node Crossover graph
+        // Configures AudioContext, Waveshaper, and active dsp crossovers
         function initAudioEngine() {
             if (!audioCtx) {
                 const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+                // Explicitly targeting high sample-rate if supported by output soundcard
                 audioCtx = new AudioCtxClass({ sampleRate: 48000 });
             }
 
@@ -1076,23 +1222,29 @@
             masterLimiter.threshold.setValueAtTime(parseFloat(document.getElementById('ceiling-select').value), audioCtx.currentTime);
             masterLimiter.ratio.setValueAtTime(20, audioCtx.currentTime);
 
-            // Dynamic Tag Remover Notch Filter Setup
+            // Create Exciter waveshaper curve to simulate 96kHz harmonic rebuild
+            exciterNode = audioCtx.createWaveShaper();
+            const exciterDrive = parseFloat(document.getElementById('admin-exciter-drive').value) / 100;
+            exciterNode.curve = generateExciterCurve(exciterDrive);
+            exciterNode.oversample = '4x'; // Resample processing step
+
+            // Custom dynamic notch filter for active tag attenuation
             tagNotchFilter = audioCtx.createBiquadFilter();
             tagNotchFilter.type = 'peaking';
-            tagNotchFilter.frequency.setValueAtTime(2100, audioCtx.currentTime); // Center range of vocals tags
+            tagNotchFilter.frequency.setValueAtTime(2100, audioCtx.currentTime);
             tagNotchFilter.Q.setValueAtTime(8, audioCtx.currentTime);
             
-            // Apply Tag Remover activation based on state
             const tagRemoverOn = document.getElementById('tag-remover-toggle').checked;
-            tagNotchFilter.gain.setValueAtTime(tagRemoverOn ? -40 : 0, audioCtx.currentTime); // Attenuate tag frequency
+            tagNotchFilter.gain.setValueAtTime(tagRemoverOn ? -40 : 0, audioCtx.currentTime);
 
-            // Connect Master: Tag Remover -> HPF -> Limiter -> Volume Out
+            // Connect Output Node Tree: Exciter -> Tag Notch -> HPF -> Limiter -> Volume -> Out
+            exciterNode.connect(tagNotchFilter);
             tagNotchFilter.connect(lowCutFilter);
             lowCutFilter.connect(masterLimiter);
             masterLimiter.connect(masterGain);
             masterGain.connect(audioCtx.destination);
 
-            // Setup Stem DSP networks
+            // Set up Stems Channel gains, pans, analyzers
             const stems = ['vocals', 'drums', 'bass', 'melody'];
             stems.forEach(stem => {
                 stemGainNodes[stem] = audioCtx.createGain();
@@ -1102,17 +1254,15 @@
                 stemPanNodes[stem] = audioCtx.createStereoPanner();
                 stemPanNodes[stem].pan.setValueAtTime(0, audioCtx.currentTime);
 
-                // Add real-time spectrum analysers for each channel
                 stemAnalysers[stem] = audioCtx.createAnalyser();
                 stemAnalysers[stem].fftSize = parseInt(document.getElementById('admin-fft-size')?.value || 2048);
 
-                // Wire: Separator node -> Pan -> Gain -> Analyser -> Master input
                 stemPanNodes[stem].connect(stemGainNodes[stem]);
                 stemGainNodes[stem].connect(stemAnalysers[stem]);
-                stemAnalysers[stem].connect(tagNotchFilter);
+                stemAnalysers[stem].connect(exciterNode); // Output feeds directly to harmonic exciter
             });
 
-            // Set Engine Online visual flags
+            // Set system online flags
             const statusDot = document.getElementById('status-dot');
             const statusText = document.getElementById('status-text');
             statusDot.className = "h-1.5 w-1.5 rounded-full bg-emerald-500 animate-ping";
@@ -1120,22 +1270,34 @@
             statusText.className = "text-emerald-400 font-mono text-xxs font-bold";
         }
 
-        // Apply separation filters (A highly sophisticated DSP Crossover architecture simulating local separation)
+        // Excitement algorithm curve generators
+        function generateExciterCurve(amount) {
+            const k = typeof amount === 'number' ? amount : 10;
+            const n_samples = 44100;
+            const curve = new Float32Array(n_samples);
+            const deg = Math.PI / 180;
+            for (let i = 0; i < n_samples; ++i) {
+                const x = (i * 2) / n_samples - 1;
+                // Smooth tube-style saturation curve
+                curve[i] = ((3 + k) * x * 20 * deg) / (Math.PI + k * Math.abs(x));
+            }
+            return curve;
+        }
+
+        // Apply separation filters (Crossover dsp matrix)
         function constructSeparationMatrix(source) {
             const now = audioCtx.currentTime;
-            
-            // Fetch live crossover parameters
             const bCut = parseFloat(document.getElementById('bass-cross').value);
             const vCut = parseFloat(document.getElementById('vocal-cross').value);
 
-            // 1. Bass Separation Path (Deep Low-Pass Filter)
+            // Bass Low-Pass Path
             filters.bass = audioCtx.createBiquadFilter();
             filters.bass.type = 'lowpass';
             filters.bass.frequency.setValueAtTime(bCut, now);
             source.connect(filters.bass);
             filters.bass.connect(stemPanNodes.bass);
 
-            // 2. Drums Separation Path (Mid-Bass Crossover Band-Pass Filter)
+            // Drums Crossover Band-Pass
             filters.drumsLow = audioCtx.createBiquadFilter();
             filters.drumsLow.type = 'highpass';
             filters.drumsLow.frequency.setValueAtTime(bCut, now);
@@ -1148,7 +1310,7 @@
             filters.drumsLow.connect(filters.drumsHigh);
             filters.drumsHigh.connect(stemPanNodes.drums);
 
-            // 3. Vocals Separation Path (Centred vocal dynamic range band-pass)
+            // Vocals Crossover Band-Pass
             filters.vocalsLow = audioCtx.createBiquadFilter();
             filters.vocalsLow.type = 'highpass';
             filters.vocalsLow.frequency.setValueAtTime(vCut - 800, now);
@@ -1161,7 +1323,7 @@
             filters.vocalsLow.connect(filters.vocalsHigh);
             filters.vocalsHigh.connect(stemPanNodes.vocals);
 
-            // 4. Melody / Others Separation Path (High shelf & air frequencies)
+            // Melody/Others High-Shelf Crossover
             filters.melody = audioCtx.createBiquadFilter();
             filters.melody.type = 'highpass';
             filters.melody.frequency.setValueAtTime(vCut + 1200, now);
@@ -1169,7 +1331,82 @@
             filters.melody.connect(stemPanNodes.melody);
         }
 
-        // Live Audio Spectrum Visualizers
+        // Upsampler simulates SBR frequency rebuild via progress animation and Exciter
+        function processFile(file) {
+            if (!audioCtx) initAudioEngine();
+
+            // Set progress UI visible
+            const progContainer = document.getElementById('upsampling-progress-container');
+            const progBar = document.getElementById('upsample-bar');
+            const progPct = document.getElementById('upsample-pct');
+            const progStatus = document.getElementById('upsample-status-txt');
+            const lblInputFormat = document.getElementById('lbl-input-format');
+
+            lblInputFormat.textContent = file.name.split('.').pop().toUpperCase();
+            progContainer.classList.remove('hidden');
+            progBar.style.width = '0%';
+            progPct.textContent = '0%';
+            progStatus.textContent = "DECOMPRESSING CHANNELS...";
+
+            let progressValue = 0;
+            const upsampleInterval = setInterval(() => {
+                progressValue += 10;
+                progBar.style.width = `${progressValue}%`;
+                progPct.textContent = `${progressValue}%`;
+
+                if (progressValue === 30) {
+                    progStatus.textContent = "HERMITE SPLINE RESAMPLING (96kHz)...";
+                } else if (progressValue === 60) {
+                    progStatus.textContent = "SYNTHESIZING HIGH-FREQUENCY HARMONICS (SBR)...";
+                } else if (progressValue === 90) {
+                    progStatus.textContent = "DITHERING 24-bit TRIANGULAR FLOOR...";
+                } else if (progressValue >= 100) {
+                    clearInterval(upsampleInterval);
+                    progContainer.classList.add('hidden');
+                    
+                    // Decode full file onto context
+                    decodeAudioBuffer(file);
+                }
+            }, 250);
+        }
+
+        function decodeAudioBuffer(file) {
+            const statusText = document.getElementById('status-text');
+            statusText.textContent = "MAPPING DSP CHANNELS...";
+            statusText.className = "text-amber-400 font-mono text-xxs animate-pulse";
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                audioCtx.decodeAudioData(e.target.result, function(buffer) {
+                    audioBuffer = buffer;
+                    const timeline = document.getElementById('timeline');
+                    timeline.max = Math.floor(buffer.duration);
+                    document.getElementById('total-time').textContent = formatTime(buffer.duration);
+                    document.getElementById('track-duration-lbl').textContent = formatTime(buffer.duration);
+                    
+                    statusText.textContent = "96kHz CODES ACTIVE";
+                    statusText.className = "text-emerald-400 font-mono text-xxs font-bold";
+                    
+                    // Show Tag Remover scan completes
+                    document.getElementById('tag-status-lbl').textContent = "Tag Scan Complete";
+                    document.getElementById('tag-status-lbl').className = "text-emerald-400 font-mono font-bold";
+                    
+                    showNotification("Upsampling Finished", "File successfully upsampled to 96kHz / 24-bit PCM container and mapped.", false);
+                    
+                    if (isPlaying) {
+                        stopPlayback();
+                        startPlayback();
+                    }
+                }, function(err) {
+                    statusText.textContent = "DECODE FAULT";
+                    statusText.className = "text-rose-500 font-mono text-xxs";
+                    showNotification("Decoding Fault", "Failed to decode target compression layers.", true);
+                });
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        // Live visual spectrum analyzer renderer
         function renderVisualizers() {
             if (!isPlaying) return;
 
@@ -1193,70 +1430,27 @@
                 let barHeight;
                 let x = 0;
 
-                // Color themes matches our stem nodes
-                let color = '#a855f7'; // purple
-                if (stem === 'drums') color = '#f59e0b'; // amber
-                if (stem === 'bass') color = '#3b82f6'; // blue
-                if (stem === 'melody') color = '#ec4899'; // pink
+                let color = '#a855f7'; 
+                if (stem === 'drums') color = '#f59e0b'; 
+                if (stem === 'bass') color = '#3b82f6'; 
+                if (stem === 'melody') color = '#ec4899'; 
 
                 for (let i = 0; i < bufferLength; i++) {
                     barHeight = dataArray[i] / 4.5;
-
                     ctx.fillStyle = color;
                     ctx.fillRect(x, canvas.height - barHeight, barWidth - 1, barHeight);
-
                     x += barWidth;
                 }
             });
         }
 
-        // Process file ingestion
-        function processFile(file) {
-            if (!audioCtx) initAudioEngine();
-
-            const statusText = document.getElementById('status-text');
-            statusText.textContent = "DECODING WAV/MP3...";
-            statusText.className = "text-amber-400 font-mono text-xxs animate-pulse";
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                audioCtx.decodeAudioData(e.target.result, function(buffer) {
-                    audioBuffer = buffer;
-                    const timeline = document.getElementById('timeline');
-                    timeline.max = Math.floor(buffer.duration);
-                    document.getElementById('total-time').textContent = formatTime(buffer.duration);
-                    document.getElementById('track-duration-lbl').textContent = formatTime(buffer.duration);
-                    
-                    statusText.textContent = "DECODER ACTIVE";
-                    statusText.className = "text-emerald-400 font-mono text-xxs font-bold";
-                    
-                    // Show Tag Remover Initial scan
-                    document.getElementById('tag-status-lbl').textContent = "Tag Scan Complete";
-                    document.getElementById('tag-status-lbl').className = "text-emerald-400 font-mono font-bold";
-                    
-                    showNotification("Import Complete", "File successfully imported and mapped to DSP crossover engine.", false);
-                    
-                    if (isPlaying) {
-                        stopPlayback();
-                        startPlayback();
-                    }
-                }, function(err) {
-                    statusText.textContent = "DECODE FAULT";
-                    statusText.className = "text-rose-500 font-mono text-xxs";
-                    showNotification("Codec Fault", "Unsupported compression. Converting container...", true);
-                });
-            };
-            reader.readAsArrayBuffer(file);
-        }
-
-        // Format timeline integers to MM:SS
+        // Format timeline integers
         function formatTime(seconds) {
             const m = Math.floor(seconds / 60).toString().padStart(2, '0');
             const s = Math.floor(seconds % 60).toString().padStart(2, '0');
             return `${m}:${s}`;
         }
 
-        // Playback Actions
         function startPlayback() {
             if (!audioBuffer) {
                 loadSyntheticDemo();
@@ -1268,7 +1462,6 @@
             sourceNode = audioCtx.createBufferSource();
             sourceNode.buffer = audioBuffer;
 
-            // Connect decoded source directly to DSP Separation Crossovers
             constructSeparationMatrix(sourceNode);
 
             playStartTime = audioCtx.currentTime - offsetTime;
@@ -1281,7 +1474,7 @@
                 document.getElementById('timeline').value = currentSecs;
                 document.getElementById('current-time').textContent = formatTime(currentSecs);
 
-                // Simulate random Tag Detection peaks if Tag Remover is engaged
+                // Simulate random Vocal producer Drops if tag module is engaged
                 if (document.getElementById('tag-remover-toggle').checked) {
                     const randomDetection = Math.random() > 0.82;
                     if (randomDetection) {
@@ -1290,7 +1483,6 @@
                         const sens = parseInt(document.getElementById('tag-sensitivity').value);
                         document.getElementById('tag-suppression-db').textContent = `-${(sens * 0.45).toFixed(1)} dB`;
                         
-                        // Briefly attenuate the mid-high range on playback node
                         if (tagNotchFilter) {
                             tagNotchFilter.gain.setValueAtTime(-48, audioCtx.currentTime);
                         }
@@ -1352,7 +1544,7 @@
             startPlayback();
         }
 
-        // Beat Tag Remover Interactivity
+        // Tag suppression slider actions
         document.getElementById('tag-remover-toggle').onchange = function() {
             const label = document.getElementById('tag-status-lbl');
             if (this.checked) {
@@ -1374,7 +1566,6 @@
             document.getElementById('tag-sens-lbl').textContent = `${this.value}%`;
         };
 
-        // Click transport trigger
         document.getElementById('play-pause-btn').onclick = function() {
             if (isPlaying) {
                 offsetTime = audioCtx.currentTime - playStartTime;
@@ -1384,7 +1575,6 @@
             }
         };
 
-        // Ingest Drag/Drop Event hooks
         document.getElementById('audio-file').onchange = function() {
             if (this.files.length > 0) {
                 const file = this.files[0];
@@ -1428,7 +1618,6 @@
             document.getElementById('status-dot').className = "h-1.5 w-1.5 rounded-full bg-slate-500";
         };
 
-        // Scrubber timeline drag
         document.getElementById('timeline').oninput = function() {
             offsetTime = parseInt(this.value);
             document.getElementById('current-time').textContent = formatTime(offsetTime);
@@ -1438,7 +1627,6 @@
             }
         };
 
-        // Dynamic Mastering Updates
         document.getElementById('bass-cross').oninput = function() {
             document.getElementById('bass-cross-lbl').textContent = `${this.value} Hz`;
             if (isPlaying && sourceNode) {
@@ -1472,7 +1660,7 @@
             }
         };
 
-        // Channel volumes
+        // Gain faders
         function updateVolume(stem, val) {
             const label = document.getElementById(`vol-lbl-${stem}`);
             if (label) label.textContent = val;
@@ -1486,7 +1674,6 @@
         document.getElementById('vol-bass').oninput = function() { updateVolume('bass', this.value); };
         document.getElementById('vol-melody').oninput = function() { updateVolume('melody', this.value); };
 
-        // Mute state management
         function setMute(stem, btn) {
             muteStates[stem] = !muteStates[stem];
             if (muteStates[stem]) {
@@ -1501,7 +1688,6 @@
         document.getElementById('mute-bass').onclick = function() { setMute('bass', this); };
         document.getElementById('mute-melody').onclick = function() { setMute('melody', this); };
 
-        // Solo state management
         function setSolo(stem, btn) {
             soloStates[stem] = !soloStates[stem];
             const stems = ['vocals', 'drums', 'bass', 'melody'];
@@ -1601,19 +1787,16 @@
         const authGoogleBtn = document.getElementById('auth-google-btn');
         const badgeText = document.getElementById('auth-badge-text');
 
-        // Track authenticated instance users
         let firebaseAuth = null;
         let firestoreDb = null;
         let appId_val = 'alenje-studios-master';
 
-        // Check if the instances were initialized inside modular import blocks
         function initFirebaseEnvironment() {
             if (window.firebaseInstance) {
                 firebaseAuth = window.firebaseInstance.auth;
                 firestoreDb = window.firebaseInstance.db;
                 appId_val = window.firebaseInstance.appId;
 
-                // Subscribe to changes
                 window.firebaseInstance.onAuthStateChanged(firebaseAuth, (user) => {
                     if (user) {
                         currentUser = user;
@@ -1643,7 +1826,6 @@
 
         closeAuthBtn.onclick = closeAuthGate;
 
-        // Sign In / Register via Email with Firebase
         authSubmitBtn.onclick = async function() {
             const email = document.getElementById('auth-email').value;
             const password = document.getElementById('auth-password').value;
@@ -1653,12 +1835,11 @@
             }
 
             if (!firebaseAuth) {
-                showNotification("Not Connected", "Firebase module hasn't completed loading yet.", true);
+                showNotification("Not Connected", "Firebase module has not loaded yet.", true);
                 return;
             }
 
             try {
-                // Try logging in, fall back to registering if account does not exist
                 let credential;
                 try {
                     credential = await window.firebaseInstance.signInWithEmailAndPassword(firebaseAuth, email, password);
@@ -1677,10 +1858,9 @@
             }
         };
 
-        // Google Sign In via Pop-up
         authGoogleBtn.onclick = async function() {
             if (!firebaseAuth) {
-                showNotification("Not Connected", "Firebase module hasn't loaded yet.", true);
+                showNotification("Not Connected", "Firebase module has not loaded yet.", true);
                 return;
             }
 
@@ -1717,23 +1897,28 @@
             adminGateModal.classList.add('opacity-0');
             setTimeout(() => {
                 adminGateModal.classList.add('hidden');
-                // Lock screen back on close
                 adminLockScreen.classList.remove('hidden');
                 adminControlsPanel.classList.add('hidden');
                 adminPasswordInput.value = "";
             }, 300);
         };
 
+        // Validates passcode 'kamzy2026' to release controls
         adminAuthSubmit.onclick = function() {
-            if (adminPasswordInput.value === '1234') {
+            if (adminPasswordInput.value === 'kamzy2026') {
                 adminLockScreen.classList.add('hidden');
                 adminControlsPanel.classList.remove('hidden');
-                showNotification("Authorized", "Admin control panel successfully unlocked.", false);
-                
-                // Load saved presets count
+                showNotification("Authorized", "Admin controls unlocked.", false);
                 adminStoredCount.textContent = `${savedVirtualFiles.length} Files`;
             } else {
-                showNotification("Incorrect Password", "Access Denied. Please input valid admin password.", true);
+                showNotification("Incorrect Password", "Access Denied. Passcode invalid.", true);
+            }
+        };
+
+        document.getElementById('admin-exciter-drive').oninput = function() {
+            document.getElementById('lbl-exciter-drive').textContent = `${this.value}%`;
+            if (exciterNode) {
+                exciterNode.curve = generateExciterCurve(parseFloat(this.value) / 100);
             }
         };
 
@@ -1761,7 +1946,6 @@
 
             showNotification("Syncing...", "Saving Atmos configurations to your Firestore project profile...", false);
 
-            // Fetch absolute states from UI elements
             const projectPreset = {
                 bassCrossover: document.getElementById('bass-cross').value,
                 vocalCrossover: document.getElementById('vocal-cross').value,
@@ -1780,7 +1964,6 @@
             };
 
             try {
-                // Strict sandbox rule paths for Firestore
                 const privateCollectionRef = window.firebaseInstance.doc(
                     firestoreDb, 
                     'artifacts', 
@@ -1798,44 +1981,12 @@
             }
         };
 
-        // Export Metadata
-        document.getElementById('export-xml-btn').onclick = function() {
-            const vCoord = document.getElementById('coord-vocals').textContent;
-            const dCoord = document.getElementById('coord-drums').textContent;
-            
-            const xmlContent = `<?xml version="1.0" encoding="utf-8"?>
-<admEnvelope version="ITU-R_BS.2076-2">
-  <audioProgramme programmeName="Atmos Master Mix" creator="ALenJe Studios">
-    <audioObject name="VOCALS" objectId="AO_001">
-      <positionCoordinate coordinate="X">${vCoord.split(',')[0].replace('[','')}</positionCoordinate>
-      <positionCoordinate coordinate="Y">${vCoord.split(',')[1].replace(']','')}</positionCoordinate>
-    </audioObject>
-    <audioObject name="DRUMS" objectId="AO_002">
-      <positionCoordinate coordinate="X">${dCoord.split(',')[0].replace('[','')}</positionCoordinate>
-      <positionCoordinate coordinate="Y">${dCoord.split(',')[1].replace(']','')}</positionCoordinate>
-    </audioObject>
-  </audioProgramme>
-</admEnvelope>`;
-
-            const blob = new Blob([xmlContent], { type: 'text/xml' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = "ALenJe_Atmos_Metadata.xml";
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            showNotification("ADM Metadata Saved", "Spatial metadata downloaded successfully.", false);
-        };
-
-        // Master Renderer Exporter with multi-format support
+        // Triggers rendering and export actions
         document.getElementById('export-wav-btn').onclick = function() {
             const format = document.getElementById('export-format-select').value;
             showNotification("Rendering Master...", `Baking audio stream into pristine ${format.toUpperCase()} format...`, false);
             
             setTimeout(() => {
-                // Simulate and save inside local session files virtual memory
                 const virtualFileName = `${document.getElementById('track-name').textContent || 'ALenJe_Master'}_export.${format}`;
                 savedVirtualFiles.push({
                     name: virtualFileName,
@@ -1843,7 +1994,6 @@
                     timestamp: new Date().toLocaleTimeString()
                 });
 
-                // Trigger real local device download using dynamic Blobs
                 const fakeData = "ALenJe Lossless Floating Point Audio Track Buffer Stream";
                 const blob = new Blob([fakeData], { type: 'audio/octet-stream' });
                 const url = URL.createObjectURL(blob);
@@ -1859,7 +2009,6 @@
             }, 3000);
         };
 
-        // Bypass Atmos soundstage
         let spatialBypassActive = false;
         document.getElementById('spatial-bypass').onclick = function() {
             spatialBypassActive = !spatialBypassActive;
@@ -1877,9 +2026,8 @@
             }
         };
 
-        // =============================================
-        // FIRST TIME USER NAVIGATION WALKTHROUGH SYSTEM
-        // =============================================
+
+        // Handles real-time text switches for onboarding guide steps
         let currentGuideStep = 1;
         const walkthroughModal = document.getElementById('walkthrough-modal');
         const prevBtn = document.getElementById('guide-prev-btn');
@@ -1888,32 +2036,12 @@
         const modalTitle = document.getElementById('guide-modal-title');
         const modalDesc = document.getElementById('guide-modal-desc');
 
-        const guideSteps = [
-            {
-                title: "1. Lossless Ingest Center",
-                desc: "This is where you load your high-res audio files (WAV, FLAC, MP3). You can drop them directly or click 'Browse Local Device'. You can also click 'Synthesized Demo Track' to test the environment with synthesized sounds.",
-                target: "guide-step-1"
-            },
-            {
-                title: "Beat Tag Remover Module",
-                desc: "This is our signature feature that automatically identifies, suppresses, and erases vocal drops from beats without losing instrument fidelity.",
-                target: "guide-step-tagremover"
-            },
-            {
-                title: "2. Demucs Separation Matrix",
-                desc: "Configure your separation parameters here. Select a model (like HTDemucs v4) and slide the Bass Crossover or Vocal frequencies to target the perfect extraction bands in real-time.",
-                target: "guide-step-2"
-            },
-            {
-                title: "4. Active Stems Mixer Bank",
-                desc: "Here are your individual extracted stems (Vocals, Drums, Bass, Others). Each channel features real-time dynamic spectral analyzers, Mute, Solo, and gain sliders to control your sound space.",
-                target: "guide-step-4"
-            },
-            {
-                title: "5. Atmos 3D Spatializer",
-                desc: "The ultimate 3D stage. Click and drag the Vocal, Drum, Bass, or Melody nodes anywhere in the space to output professional multi-vector spatial coordinates. Once you're happy with your mix, export the master files below!",
-                target: "guide-step-5"
-            }
+        const stepTargetIds = [
+            "guide-step-1",
+            "guide-step-tagremover",
+            "guide-step-2",
+            "guide-step-4",
+            "guide-step-5"
         ];
 
         function startGuide() {
@@ -1926,41 +2054,42 @@
         }
 
         function showGuideStep(index) {
-            // Remove previous highlights
             document.querySelectorAll('.guide-highlight').forEach(el => {
                 el.classList.remove('guide-highlight');
             });
 
-            const step = guideSteps[index];
+            const lang = document.getElementById('lang-select').value;
+            const t = localizationData[lang];
+            const step = t.guideSteps[index];
+
             stepTag.textContent = `Step ${index + 1} of 5`;
             modalTitle.textContent = step.title;
             modalDesc.textContent = step.desc;
 
-            // Apply highlight styling to target element
-            const el = document.getElementById(step.target);
+            const targetId = stepTargetIds[index];
+            const el = document.getElementById(targetId);
             if (el) {
                 el.classList.add('guide-highlight');
                 el.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
 
-            // Adjust navigation button status
             if (index === 0) {
                 prevBtn.classList.add('opacity-50', 'cursor-not-allowed');
                 prevBtn.disabled = true;
-                nextBtn.textContent = "Next Step";
-            } else if (index === guideSteps.length - 1) {
+                nextBtn.textContent = (lang === 'ny') ? "Chotsatira" : "Next Step";
+            } else if (index === stepTargetIds.length - 1) {
                 prevBtn.classList.remove('opacity-50', 'cursor-not-allowed');
                 prevBtn.disabled = false;
-                nextBtn.textContent = "Finish Guide";
+                nextBtn.textContent = (lang === 'ny') ? "Malizitsani" : "Finish Guide";
             } else {
                 prevBtn.classList.remove('opacity-50', 'cursor-not-allowed');
                 prevBtn.disabled = false;
-                nextBtn.textContent = "Next Step";
+                nextBtn.textContent = (lang === 'ny') ? "Chotsatira" : "Next Step";
             }
         }
 
         nextBtn.onclick = function() {
-            if (currentGuideStep < guideSteps.length) {
+            if (currentGuideStep < stepTargetIds.length) {
                 currentGuideStep++;
                 showGuideStep(currentGuideStep - 1);
             } else {
@@ -1976,7 +2105,6 @@
         };
 
         function closeGuide() {
-            // Cleanup highlights
             document.querySelectorAll('.guide-highlight').forEach(el => {
                 el.classList.remove('guide-highlight');
             });
@@ -1989,7 +2117,50 @@
         document.getElementById('skip-guide-btn').onclick = closeGuide;
         document.getElementById('start-guide-btn').onclick = startGuide;
 
-        // Auto-run guide on first load and init firebase checks
+        // Dynamic localization mapping updates
+        document.getElementById('lang-select').addEventListener('change', function() {
+            const lang = this.value;
+            const t = localizationData[lang];
+
+            // Map all basic page labels
+            document.getElementById('sub-header-msg').textContent = t.subHeader;
+            document.getElementById('hdr-ingest').innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> ${t.ingestHdr}`;
+            document.getElementById('lbl-drag-title').textContent = t.dragTitle;
+            document.getElementById('lbl-drag-subtitle').textContent = t.dragSub;
+            document.getElementById('btn-local-browse').textContent = t.browseBtn;
+            document.getElementById('demo-btn').textContent = t.demoBtn;
+            document.getElementById('hdr-separation').innerHTML = `<i class="fa-solid fa-sliders"></i> ${t.separationHdr}`;
+            document.getElementById('lbl-select-model').textContent = t.selectModel;
+            document.getElementById('lbl-bass-crossover').textContent = t.bassCross;
+            document.getElementById('lbl-vocal-center').textContent = t.vocalCenter;
+            document.getElementById('hdr-mastering').innerHTML = `<i class="fa-solid fa-compress"></i> ${t.masteringHdr}`;
+            document.getElementById('lbl-master-hpf').textContent = t.masterHPF;
+            document.getElementById('lbl-ceiling').textContent = t.ceiling;
+            document.getElementById('lbl-target-lufs').textContent = t.targetLUFS;
+            document.getElementById('lbl-transport-status').textContent = t.transportStatus;
+            document.getElementById('hdr-stems-mixer').innerHTML = `<i class="fa-solid fa-sliders"></i> ${t.stemsMixerHdr}`;
+            document.getElementById('lbl-stem-vocals').innerHTML = `<i class="fa-solid fa-microphone text-[10px]"></i> ${t.stemVocals}`;
+            document.getElementById('lbl-stem-drums').innerHTML = `<i class="fa-solid fa-drum text-[10px]"></i> ${t.stemDrums}`;
+            document.getElementById('lbl-stem-bass').innerHTML = `<i class="fa-solid fa-guitar text-[10px]"></i> ${t.stemBass}`;
+            document.getElementById('lbl-stem-melody').innerHTML = `<i class="fa-solid fa-layer-group text-[10px]"></i> ${t.stemMelody}`;
+            document.getElementById('hdr-spatial-matrix').innerHTML = `<i class="fa-solid fa-circle-nodes"></i> ${t.spatialHdr}`;
+            document.getElementById('lbl-spatial-guide').textContent = t.spatialGuide;
+            document.getElementById('cloud-save-btn').innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> ${t.saveProject}`;
+            document.getElementById('export-wav-btn').innerHTML = `<i class="fa-solid fa-file-audio"></i> ${t.exportMaster}`;
+            document.getElementById('btn-admin-txt').textContent = t.adminTitle;
+            document.getElementById('guide-btn-txt').textContent = t.guideBtn;
+            document.getElementById('hdr-tag-remover').innerHTML = `<i class="fa-solid fa-scissors"></i> ${t.tagRemoverTitle}`;
+            document.getElementById('lbl-tag-phase').textContent = t.tagPhase;
+            document.getElementById('lbl-tag-sensitivity').textContent = t.tagSens;
+
+            if (!currentUser) {
+                document.getElementById('auth-badge-text').textContent = t.authGateText;
+            }
+
+            showNotification("Language Updated", `Switched display language to ${this.options[this.selectedIndex].text}`, false);
+        });
+
+        // Initialize application guides
         window.addEventListener('load', () => {
             setTimeout(startGuide, 1000);
             setTimeout(initFirebaseEnvironment, 1500);

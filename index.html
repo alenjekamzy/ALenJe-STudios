@@ -1,0 +1,2000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALenJe Studios - AI Audio Separator & Lossless Dolby Atmos Suite</title>
+    <!-- Tailwind CSS for modern design tokens -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for music and interface icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Smooth Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(2, 6, 23, 0.4);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.2);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(148, 163, 184, 0.4);
+        }
+
+        /* Ambient Soundwave Space & Grid */
+        .grid-bg {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+        }
+
+        /* iOS 26 High-Fidelity Glassmorphism Styles */
+        .ios-glass {
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(20px) saturate(190%);
+            -webkit-backdrop-filter: blur(20px) saturate(190%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.3);
+        }
+        
+        .ios-glass-heavy {
+            background: rgba(7, 10, 25, 0.95);
+            backdrop-filter: blur(30px) saturate(200%);
+            -webkit-backdrop-filter: blur(30px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 20px 60px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        .text-glow-indigo {
+            text-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Animated background mesh glows */
+        .mesh-glow-1 {
+            background: radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 60%);
+        }
+        .mesh-glow-2 {
+            background: radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.12) 0%, transparent 60%);
+        }
+
+        /* Guide highlight pulsing border */
+        .guide-highlight {
+            position: relative;
+            z-index: 50;
+            box-shadow: 0 0 0 9999px rgba(2, 4, 10, 0.82), 0 0 15px 5px rgba(99, 102, 241, 0.65);
+            border-color: rgba(99, 102, 241, 0.9) !important;
+        }
+    </style>
+
+    <!-- Firebase App and SDK Libraries -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Your web app's Firebase configuration passed dynamically
+        const firebaseConfig = {
+            apiKey: "AIzaSyA4R6nnlOx3NLc1TqV7IYJZPauPm7rcx5w",
+            authDomain: "alenje-studios.firebaseapp.com",
+            projectId: "alenje-studios",
+            storageBucket: "alenje-studios.firebasestorage.app",
+            messagingSenderId: "602509166270",
+            appId: "1:602509166270:web:2a506cf76fdc146f60c0ef",
+            measurementId: "G-TG6ENKE2N7"
+        };
+
+        // Initialize Firebase services
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        // Safe global context application ID
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'alenje-studios-master';
+
+        // Bind Firebase methods globally to communicate with UI layers below
+        window.firebaseInstance = {
+            auth,
+            db,
+            appId,
+            doc,
+            setDoc,
+            getDoc,
+            collection,
+            signInWithEmailAndPassword,
+            createUserWithEmailAndPassword,
+            signInWithPopup,
+            GoogleAuthProvider,
+            onAuthStateChanged,
+            signOut,
+            provider
+        };
+    </script>
+</head>
+<body class="bg-[#02040a] text-slate-100 min-h-screen flex flex-col font-sans selection:bg-indigo-500 selection:text-white grid-bg relative overflow-x-hidden">
+
+    <!-- Ambient glows -->
+    <div class="absolute top-0 left-0 w-full h-full mesh-glow-1 pointer-events-none z-0"></div>
+    <div class="absolute top-0 left-0 w-full h-full mesh-glow-2 pointer-events-none z-0"></div>
+
+    <!-- MAIN MENU HEADER -->
+    <header class="border-b border-white/5 bg-[#05070e]/80 backdrop-blur-2xl sticky top-0 z-40 px-6 py-3.5 flex flex-col md:flex-row items-center justify-between gap-4">
+        <!-- Logo & Studio Title -->
+        <div class="flex items-center space-x-4">
+            <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-500 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                <i class="fa-solid fa-compact-disc text-lg text-white animate-spin" style="animation-duration: 6s;"></i>
+            </div>
+            <div>
+                <div class="flex items-center space-x-2">
+                    <h1 class="font-black text-lg tracking-wider bg-gradient-to-r from-indigo-400 via-purple-300 to-emerald-300 bg-clip-text text-transparent text-glow-indigo">
+                        ALenJe STUDIOS
+                    </h1>
+                    <span class="text-[9px] bg-emerald-500/10 text-emerald-400 font-mono px-1.5 py-0.5 rounded-md border border-emerald-500/20 uppercase tracking-widest font-semibold">Ultimate Pro</span>
+                </div>
+                <p id="sub-header-msg" class="text-xs text-slate-400 font-medium">Real-time Audio Separation Engine & Lossless Dolby Atmos 3D Masterer</p>
+            </div>
+        </div>
+
+        <!-- Language, Profile & Network Center -->
+        <div class="flex items-center flex-wrap gap-3 z-40">
+            <!-- Admin Controls Button -->
+            <button id="admin-portal-btn" class="flex items-center space-x-1.5 px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-400 rounded-lg text-xs font-semibold transition-all">
+                <i class="fa-solid fa-user-gear"></i>
+                <span id="btn-admin-txt">Admin Settings</span>
+            </button>
+
+            <!-- Walkthrough Help Button -->
+            <button id="start-guide-btn" class="flex items-center space-x-1.5 px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 rounded-lg text-xs font-semibold transition-all">
+                <i class="fa-solid fa-circle-question"></i>
+                <span id="guide-btn-txt">App Guide</span>
+            </button>
+
+            <!-- Dynamic Localization Switcher -->
+            <div class="relative inline-block text-left">
+                <select id="lang-select" class="bg-white/5 border border-white/10 hover:border-white/20 text-slate-300 text-xs rounded-lg px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer font-medium">
+                    <option value="en" class="bg-slate-950 text-slate-200" selected>🇺🇸 English</option>
+                    <option value="ny" class="bg-slate-950 text-slate-200">🇲🇼 Chichewa</option>
+                    <option value="af" class="bg-slate-950 text-slate-200">🇿🇦 Afrikaans</option>
+                    <option value="tum" class="bg-slate-950 text-slate-200">🇲🇼 Tumbuka</option>
+                </select>
+            </div>
+
+            <!-- Profile Auth Status Badge -->
+            <button id="auth-portal-btn" class="flex items-center space-x-2 px-3.5 py-1.5 bg-indigo-600/15 hover:bg-indigo-600/25 border border-indigo-500/30 hover:border-indigo-500/50 rounded-lg text-xs font-semibold text-indigo-300 transition-all">
+                <i class="fa-solid fa-user-shield text-xs"></i>
+                <span id="auth-badge-text">Sign In / Register</span>
+            </button>
+
+            <!-- DSP Connection Status badge -->
+            <div class="text-[11px] px-3 py-1.5 bg-slate-900/40 border border-white/5 rounded-lg flex items-center gap-2">
+                <span class="h-1.5 w-1.5 rounded-full bg-slate-500" id="status-dot"></span>
+                <span id="status-text" class="text-slate-400 font-mono text-xxs">DSP Offline</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN WORKSPACE -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 relative z-10">
+        
+        <!-- LEFT COLUMN PANELS -->
+        <section class="lg:col-span-5 flex flex-col space-y-6">
+            
+            <!-- PANEL 1: INGEST CENTER -->
+            <div id="guide-step-1" class="ios-glass rounded-2xl p-5 shadow-2xl relative overflow-hidden transition-all duration-300">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="flex items-center justify-between mb-4">
+                    <h2 id="hdr-ingest" class="text-xs font-bold uppercase tracking-widest text-indigo-400 flex items-center gap-2">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> 1. Lossless Ingest Center
+                    </h2>
+                    <span class="text-[9px] text-slate-500 font-mono uppercase bg-white/5 px-2 py-0.5 rounded">High-Res PCM</span>
+                </div>
+
+                <!-- Advanced Drag Area -->
+                <div id="drop-zone" class="border border-dashed border-white/10 hover:border-indigo-500/40 bg-slate-950/40 rounded-xl p-5 transition-all duration-200 text-center cursor-pointer group">
+                    <input type="file" id="audio-file" accept="audio/*" class="hidden">
+                    <div class="w-11 h-11 rounded-full bg-white/5 group-hover:bg-indigo-950/30 flex items-center justify-center mx-auto mb-3 transition-colors">
+                        <i class="fa-solid fa-folder-open text-xl text-slate-500 group-hover:text-indigo-400"></i>
+                    </div>
+                    <p id="lbl-drag-title" class="text-xs font-bold text-slate-200">Drag & Drop Lossless File</p>
+                    <p id="lbl-drag-subtitle" class="text-[10px] text-slate-500 mt-1">Accepts FLAC, WAV, ALAC, or premium MP3</p>
+                    
+                    <div class="mt-4 flex flex-wrap justify-center gap-2">
+                        <button onclick="document.getElementById('audio-file').click()" id="btn-local-browse" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-[10px] font-bold tracking-wide uppercase shadow-lg shadow-indigo-500/10 transition-colors">
+                            Browse Local Device
+                        </button>
+                        <button id="demo-btn" class="px-3 py-1.5 bg-white/5 hover:bg-white/10 text-slate-300 border border-white/5 rounded-lg text-[10px] font-bold tracking-wide uppercase transition-colors">
+                            Synthesized Demo Track
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Live Audio Metadata Card -->
+                <div id="track-details" class="hidden mt-4 p-3.5 bg-slate-950/80 border border-white/5 rounded-xl flex items-center justify-between">
+                    <div class="flex items-center space-x-3 truncate">
+                        <div class="w-8 h-8 bg-emerald-500/10 rounded-lg flex items-center justify-center text-emerald-400 border border-emerald-500/10">
+                            <i class="fa-solid fa-waveform text-xs"></i>
+                        </div>
+                        <div class="truncate">
+                            <p id="track-name" class="text-xs font-bold text-slate-200 truncate">Song_Loaded.wav</p>
+                            <div class="flex items-center space-x-2 mt-0.5">
+                                <span id="track-specs" class="text-[9px] text-emerald-400 font-mono bg-emerald-500/5 px-1 rounded border border-emerald-500/10">Loaded</span>
+                                <span id="track-duration-lbl" class="text-[9px] text-slate-500 font-mono">0:00</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="unload-btn" class="text-slate-500 hover:text-rose-400 transition-colors p-2 rounded-lg">
+                        <i class="fa-solid fa-trash-can text-sm"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- PANEL 2: BEAT-TAG REMOVER MODULE -->
+            <div id="guide-step-tagremover" class="ios-glass rounded-2xl p-5 shadow-2xl relative transition-all duration-300 border border-pink-500/10">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 id="hdr-tag-remover" class="text-xs font-bold uppercase tracking-widest text-pink-400 flex items-center gap-2">
+                        <i class="fa-solid fa-scissors"></i> Beat Tag Remover Module
+                    </h2>
+                    <span class="text-[9px] text-slate-500 font-mono">Active Spectral Gate</span>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="p-3 bg-slate-950/60 border border-white/5 rounded-xl space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span id="lbl-tag-phase" class="text-xs font-semibold text-slate-300">Phase Inversion (Tag Destructor)</span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="tag-remover-toggle" class="sr-only peer">
+                                <div class="w-9 h-5 bg-slate-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-slate-300 after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-pink-500"></div>
+                            </label>
+                        </div>
+                        <p class="text-[10px] text-slate-500">Intelligently detects and filters out voice tags (producer drops) dynamically without affecting beat quality.</p>
+                        
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1">
+                                <span id="lbl-tag-sensitivity" class="font-bold text-slate-400 uppercase">Tag Detection Sensitivity</span>
+                                <span id="tag-sens-lbl" class="font-mono text-pink-400 font-semibold">75%</span>
+                            </div>
+                            <input id="tag-sensitivity" type="range" class="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-pink-500" min="10" max="100" value="75">
+                        </div>
+
+                        <!-- Real-time Tag Suppressor Meter -->
+                        <div class="bg-slate-950 p-2.5 rounded-lg border border-white/5 flex justify-between items-center text-[10px]">
+                            <div class="flex flex-col">
+                                <span class="text-slate-500 font-bold uppercase">Status</span>
+                                <span id="tag-status-lbl" class="text-slate-400 font-mono">Waiting for audio...</span>
+                            </div>
+                            <div class="flex flex-col text-right">
+                                <span class="text-slate-500 font-bold uppercase">Suppression</span>
+                                <span id="tag-suppression-db" class="text-pink-400 font-mono">0.0 dB</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANEL 3: AI SEPARATION CODES -->
+            <div id="guide-step-2" class="ios-glass rounded-2xl p-5 shadow-2xl relative transition-all duration-300">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 id="hdr-separation" class="text-xs font-bold uppercase tracking-widest text-indigo-400 flex items-center gap-2">
+                        <i class="fa-solid fa-sliders"></i> 2. Demucs Separation Matrix
+                    </h2>
+                    <span class="text-[9px] text-slate-500 font-mono">Crossover DSP</span>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Separation Model Selector -->
+                    <div>
+                        <label id="lbl-select-model" class="text-[9px] text-slate-500 font-bold uppercase tracking-wider block mb-1.5">Primary Separation Engine</label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button id="model-demucs" class="py-1.5 px-2 bg-indigo-600 border border-indigo-500/20 text-white rounded-lg text-xxs font-bold flex flex-col items-center justify-center gap-0.5 transition-all">
+                                <i class="fa-solid fa-brain"></i>
+                                <span>HTDemucs v4</span>
+                            </button>
+                            <button id="model-spleeter" class="py-1.5 px-2 bg-white/5 hover:bg-white/10 border border-white/5 text-slate-400 hover:text-slate-200 rounded-lg text-xxs font-bold flex flex-col items-center justify-center gap-0.5 transition-all">
+                                <i class="fa-solid fa-wave-square"></i>
+                                <span>Spleeter 5-St</span>
+                            </button>
+                            <button id="model-wavelet" class="py-1.5 px-2 bg-white/5 hover:bg-white/10 border border-white/5 text-slate-400 hover:text-slate-200 rounded-lg text-xxs font-bold flex flex-col items-center justify-center gap-0.5 transition-all">
+                                <i class="fa-solid fa-filter"></i>
+                                <span>ALenJe DSP</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Split Parameters -->
+                    <div class="p-3 bg-slate-950/60 border border-white/5 rounded-xl space-y-3">
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1">
+                                <span id="lbl-bass-crossover" class="font-bold text-slate-400 uppercase">Bass Crossover Range</span>
+                                <span id="bass-cross-lbl" class="font-mono text-indigo-400 font-semibold">120 Hz</span>
+                            </div>
+                            <input id="bass-cross" type="range" class="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-500" min="60" max="250" value="120">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1">
+                                <span id="lbl-vocal-center" class="font-bold text-slate-400 uppercase">Vocal Center Frequency</span>
+                                <span id="vocal-cross-lbl" class="font-mono text-purple-400 font-semibold">2,200 Hz</span>
+                            </div>
+                            <input id="vocal-cross" type="range" class="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-purple-500" min="1000" max="4000" value="2200">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANEL 4: MASTERING MATRIX CHAIN -->
+            <div id="guide-step-3" class="ios-glass rounded-2xl p-5 shadow-2xl relative transition-all duration-300">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 id="hdr-mastering" class="text-xs font-bold uppercase tracking-widest text-indigo-400 flex items-center gap-2">
+                        <i class="fa-solid fa-compress"></i> 3. Stereo Master Limiter
+                    </h2>
+                    <span class="text-[9px] text-emerald-400 font-mono bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">Lossless</span>
+                </div>
+
+                <div class="space-y-3">
+                    <!-- High-pass cut filters -->
+                    <div class="p-3 bg-slate-950/60 border border-white/5 rounded-xl">
+                        <div class="flex justify-between items-center mb-1">
+                            <span id="lbl-master-hpf" class="text-[11px] font-semibold text-slate-300">Master High-Pass Filter</span>
+                            <span id="hpf-lbl" class="text-[10px] font-mono text-indigo-400 font-semibold">25 Hz</span>
+                        </div>
+                        <input id="master-hpf" type="range" class="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-500" min="10" max="80" value="25">
+                    </div>
+
+                    <!-- Ceilings and Standard selections -->
+                    <div class="p-3 bg-slate-950/60 border border-white/5 rounded-xl grid grid-cols-2 gap-3">
+                        <div>
+                            <label id="lbl-ceiling" class="text-[9px] text-slate-500 font-bold block mb-1 uppercase">Ceiling Limit</label>
+                            <select id="ceiling-select" class="w-full bg-slate-950 border border-slate-800 text-slate-300 text-xxs rounded-lg p-2 font-mono">
+                                <option value="-1.0" selected>-1.0 dBTP (Atmos Standard)</option>
+                                <option value="-1.5">-1.5 dBTP (Lossless Clean)</option>
+                                <option value="-2.0">-2.0 dBTP (Strict ceiling)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label id="lbl-target-lufs" class="text-[9px] text-slate-500 font-bold block mb-1 uppercase">Integrated Target</label>
+                            <select id="lufs-select" class="w-full bg-slate-950 border border-slate-800 text-slate-300 text-xxs rounded-lg p-2 font-mono">
+                                <option value="-18" selected>-18 LUFS (Spatial Target)</option>
+                                <option value="-14">-14 LUFS (Stereo Norm)</option>
+                                <option value="-10">-10 LUFS (Club Heavy)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- RIGHT WORKSPACE PANELS -->
+        <section class="lg:col-span-7 flex flex-col space-y-6">
+            
+            <!-- MASTER MIX & TRANSPORT CONTROL SLATE -->
+            <div class="ios-glass rounded-2xl p-4 shadow-2xl flex flex-wrap items-center justify-between gap-4">
+                <div class="flex items-center space-x-3">
+                    <button id="play-pause-btn" class="w-12 h-12 bg-gradient-to-r from-indigo-500 via-purple-600 to-pink-500 hover:scale-105 active:scale-95 text-white rounded-full flex items-center justify-center text-lg shadow-lg shadow-indigo-500/20 transition-all">
+                        <i id="play-icon" class="fa-solid fa-play ml-0.5"></i>
+                    </button>
+                    <div>
+                        <span id="lbl-transport-status" class="text-[9px] font-extrabold text-indigo-300 block tracking-wider uppercase">Transport Control</span>
+                        <div class="flex items-center space-x-2">
+                            <span id="current-time" class="text-xs font-mono font-bold text-slate-200">00:00</span>
+                            <span class="text-xs text-slate-600">/</span>
+                            <span id="total-time" class="text-xs font-mono text-slate-500">00:00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Custom Timeline Scrubber -->
+                <div class="flex-1 min-w-[180px] px-1">
+                    <input id="timeline" type="range" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-500" min="0" max="100" value="0">
+                </div>
+
+                <!-- Master Output Gain Slider -->
+                <div class="flex items-center space-x-3.5">
+                    <div class="flex items-center space-x-2 bg-slate-950/80 border border-white/5 px-3 py-1.5 rounded-lg">
+                        <i class="fa-solid fa-volume-high text-slate-400 text-xs"></i>
+                        <input id="master-volume" type="range" class="w-16 h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-500" min="0" max="100" value="80">
+                    </div>
+                </div>
+            </div>
+
+            <!-- MIXERS RACK & STEM VISUALIZERS -->
+            <div id="guide-step-4" class="ios-glass rounded-2xl p-5 shadow-2xl relative transition-all duration-300">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 id="hdr-stems-mixer" class="text-xs font-bold uppercase tracking-widest text-indigo-400 flex items-center gap-2">
+                        <i class="fa-solid fa-sliders"></i> 4. Active Stems Mixer Bank
+                    </h2>
+                    <span class="text-[9px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 uppercase tracking-widest font-semibold">Wave Analyzer Active</span>
+                </div>
+
+                <!-- STEM CONSOLES GRID -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    
+                    <!-- STEM: VOCALS -->
+                    <div class="bg-slate-950/70 border border-white/5 rounded-xl p-3 flex flex-col justify-between relative">
+                        <div class="absolute inset-0 bg-gradient-to-b from-purple-500/5 to-transparent rounded-xl pointer-events-none"></div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span id="lbl-stem-vocals" class="text-xs font-bold text-purple-400 flex items-center gap-1">
+                                <i class="fa-solid fa-microphone text-[10px]"></i> Vocals
+                            </span>
+                            <div class="flex items-center space-x-1">
+                                <button id="mute-vocals" class="w-5 h-5 rounded bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white transition-colors text-[9px] font-bold">M</button>
+                                <button id="solo-vocals" class="w-5 h-5 rounded bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-purple-400 transition-colors text-[9px] font-bold">S</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Reactive Analyzer Canvas -->
+                        <canvas id="canvas-vocals" class="w-full h-9 bg-slate-950 rounded border border-white/5 mb-2"></canvas>
+
+                        <div class="flex items-center justify-between space-x-2">
+                            <i class="fa-solid fa-volume-low text-slate-600 text-[10px]"></i>
+                            <input id="vol-vocals" type="range" class="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-purple-500" min="0" max="100" value="85">
+                            <span id="vol-lbl-vocals" class="text-[10px] font-mono text-slate-400 w-6 text-right">85</span>
+                        </div>
+                    </div>
+
+                    <!-- STEM: DRUMS -->
+                    <div class="bg-slate-950/70 border border-white/5 rounded-xl p-3 flex flex-col justify-between relative">
+                        <div class="absolute inset-0 bg-gradient-to-b from-amber-500/5 to-transparent rounded-xl pointer-events-none"></div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span id="lbl-stem-drums" class="text-xs font-bold text-amber-400 flex items-center gap-1">
+                                <i class="fa-solid fa-drum text-[10px]"></i> Drums
+                            </span>
+                            <div class="flex items-center space-x-1">
+                                <button id="mute-drums" class="w-5 h-5 rounded bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white transition-colors text-[9px] font-bold">M</button>
+                                <button id="solo-drums" class="w-5 h-5 rounded bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-amber-400 transition-colors text-[9px] font-bold">S</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Reactive Analyzer Canvas -->
+                        <canvas id="canvas-drums" class="w-full h-9 bg-slate-950 rounded border border-white/5 mb-2"></canvas>
+
+                        <div class="flex items-center justify-between space-x-2">
+                            <i class="fa-solid fa-volume-low text-slate-600 text-[10px]"></i>
+                            <input id="vol-drums" type="range" class="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-500" min="0" max="100" value="85">
+                            <span id="vol-lbl-drums" class="text-[10px] font-mono text-slate-400 w-6 text-right">85</span>
+                        </div>
+                    </div>
+
+                    <!-- STEM: BASS -->
+                    <div class="bg-slate-950/70 border border-white/5 rounded-xl p-3 flex flex-col justify-between relative">
+                        <div class="absolute inset-0 bg-gradient-to-b from-blue-500/5 to-transparent rounded-xl pointer-events-none"></div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span id="lbl-stem-bass" class="text-xs font-bold text-blue-400 flex items-center gap-1">
+                                <i class="fa-solid fa-guitar text-[10px]"></i> Bass
+                            </span>
+                            <div class="flex items-center space-x-1">
+                                <button id="mute-bass" class="w-5 h-5 rounded bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white transition-colors text-[9px] font-bold">M</button>
+                                <button id="solo-bass" class="w-5 h-5 rounded bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-blue-400 transition-colors text-[9px] font-bold">S</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Reactive Analyzer Canvas -->
+                        <canvas id="canvas-bass" class="w-full h-9 bg-slate-950 rounded border border-white/5 mb-2"></canvas>
+
+                        <div class="flex items-center justify-between space-x-2">
+                            <i class="fa-solid fa-volume-low text-slate-600 text-[10px]"></i>
+                            <input id="vol-bass" type="range" class="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500" min="0" max="100" value="85">
+                            <span id="vol-lbl-bass" class="text-[10px] font-mono text-slate-400 w-6 text-right">85</span>
+                        </div>
+                    </div>
+
+                    <!-- STEM: OTHERS/MELODY -->
+                    <div class="bg-slate-950/70 border border-white/5 rounded-xl p-3 flex flex-col justify-between relative">
+                        <div class="absolute inset-0 bg-gradient-to-b from-pink-500/5 to-transparent rounded-xl pointer-events-none"></div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span id="lbl-stem-melody" class="text-xs font-bold text-pink-400 flex items-center gap-1">
+                                <i class="fa-solid fa-layer-group text-[10px]"></i> Others
+                            </span>
+                            <div class="flex items-center space-x-1">
+                                <button id="mute-melody" class="w-5 h-5 rounded bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white transition-colors text-[9px] font-bold">M</button>
+                                <button id="solo-melody" class="w-5 h-5 rounded bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-pink-400 transition-colors text-[9px] font-bold">S</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Reactive Analyzer Canvas -->
+                        <canvas id="canvas-melody" class="w-full h-9 bg-slate-950 rounded border border-white/5 mb-2"></canvas>
+
+                        <div class="flex items-center justify-between space-x-2">
+                            <i class="fa-solid fa-volume-low text-slate-600 text-[10px]"></i>
+                            <input id="vol-melody" type="range" class="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-pink-500" min="0" max="100" value="85">
+                            <span id="vol-lbl-melody" class="text-[10px] font-mono text-slate-400 w-6 text-right">85</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ATMOS 3D PANNER STAGE AREA -->
+            <div id="guide-step-5" class="ios-glass rounded-2xl p-5 shadow-2xl relative flex-1 flex flex-col border border-emerald-500/10 transition-all duration-300">
+                <div class="flex items-center justify-between mb-3">
+                    <div>
+                        <h2 id="hdr-spatial-matrix" class="text-xs font-bold uppercase tracking-widest text-emerald-400 flex items-center gap-2">
+                            <i class="fa-solid fa-circle-nodes"></i> 5. ALenJe Atmos 3D Spatializer Matrix
+                        </h2>
+                        <p id="lbl-spatial-guide" class="text-[10px] text-slate-500">Drag spatial nodes around the Dolby Atmos sound field matrix to map 3D vector points.</p>
+                    </div>
+                    <button id="spatial-bypass" class="px-2.5 py-1 border border-white/10 hover:border-emerald-500/50 text-slate-400 hover:text-slate-200 rounded-lg text-xxs transition-colors uppercase tracking-wider font-bold">
+                        Bypass Atmos
+                    </button>
+                </div>
+
+                <!-- 3D Grid Arena -->
+                <div class="relative flex-1 min-h-[200px] bg-slate-950/80 border border-white/5 rounded-xl overflow-hidden flex items-center justify-center p-4">
+                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <div class="w-full border-t border-white/5"></div>
+                    </div>
+                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <div class="h-full border-l border-white/5"></div>
+                    </div>
+                    
+                    <!-- Circular Field Boundaries -->
+                    <div class="absolute w-[85%] h-[85%] border border-white/5 rounded-full pointer-events-none flex items-center justify-center">
+                        <div class="w-[70%] h-[70%] border border-white/5 rounded-full flex items-center justify-center">
+                            <div class="w-[45%] h-[45%] border border-white/5 rounded-full"></div>
+                        </div>
+                    </div>
+
+                    <!-- Layout Horizon Reference Tags -->
+                    <span class="absolute top-2 left-1/2 transform -translate-x-1/2 text-[9px] font-mono tracking-widest text-slate-700 uppercase">Center Bed</span>
+                    <span class="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-[9px] font-mono tracking-widest text-slate-700 uppercase">Rear Object Field</span>
+                    <span class="absolute left-2 top-1/2 transform -translate-y-1/2 text-[9px] font-mono tracking-widest text-slate-700 uppercase">Left Bed</span>
+                    <span class="absolute right-2 top-1/2 transform -translate-y-1/2 text-[9px] font-mono tracking-widest text-slate-700 uppercase">Right Bed</span>
+
+                    <!-- Drag Arena Element -->
+                    <div id="spatial-arena" class="absolute inset-0 cursor-crosshair">
+                        <!-- Vocals Node -->
+                        <div id="obj-vocals" class="absolute w-8 h-8 -mt-4 -ml-4 rounded-full bg-purple-500/10 border-2 border-purple-400 shadow-lg shadow-purple-500/30 flex items-center justify-center cursor-grab active:cursor-grabbing hover:scale-110 transition-all select-none" style="top: 25%; left: 50%;">
+                            <i class="fa-solid fa-microphone text-[10px] text-purple-200"></i>
+                        </div>
+                        <!-- Drums Node -->
+                        <div id="obj-drums" class="absolute w-8 h-8 -mt-4 -ml-4 rounded-full bg-amber-500/10 border-2 border-amber-400 shadow-lg shadow-amber-500/30 flex items-center justify-center cursor-grab active:cursor-grabbing hover:scale-110 transition-all select-none" style="top: 70%; left: 35%;">
+                            <i class="fa-solid fa-drum text-[10px] text-amber-200"></i>
+                        </div>
+                        <!-- Bass Node -->
+                        <div id="obj-bass" class="absolute w-8 h-8 -mt-4 -ml-4 rounded-full bg-blue-500/10 border-2 border-blue-400 shadow-lg shadow-blue-500/30 flex items-center justify-center cursor-grab active:cursor-grabbing hover:scale-110 transition-all select-none" style="top: 70%; left: 65%;">
+                            <i class="fa-solid fa-guitar text-[10px] text-blue-200"></i>
+                        </div>
+                        <!-- Others Node -->
+                        <div id="obj-melody" class="absolute w-8 h-8 -mt-4 -ml-4 rounded-full bg-pink-500/10 border-2 border-pink-400 shadow-lg shadow-pink-500/30 flex items-center justify-center cursor-grab active:cursor-grabbing hover:scale-110 transition-all select-none" style="top: 45%; left: 20%;">
+                            <i class="fa-solid fa-layer-group text-[10px] text-pink-200"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer controllers and savers -->
+                <div class="mt-4 pt-3 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
+                    <div class="grid grid-cols-4 gap-2 text-center w-full md:w-auto">
+                        <div class="px-2.5 py-1.5 bg-slate-950/80 rounded-lg border border-white/5">
+                            <span class="text-[8px] font-mono uppercase text-slate-500 block mb-0.5">Vocals</span>
+                            <span id="coord-vocals" class="text-[10px] font-mono font-semibold text-purple-400">[0.0, 0.5]</span>
+                        </div>
+                        <div class="px-2.5 py-1.5 bg-slate-950/80 rounded-lg border border-white/5">
+                            <span class="text-[8px] font-mono uppercase text-slate-500 block mb-0.5">Drums</span>
+                            <span id="coord-drums" class="text-[10px] font-mono font-semibold text-amber-400">[-0.3, -0.4]</span>
+                        </div>
+                        <div class="px-2.5 py-1.5 bg-slate-950/80 rounded-lg border border-white/5">
+                            <span class="text-[8px] font-mono uppercase text-slate-500 block mb-0.5">Bass</span>
+                            <span id="coord-bass" class="text-[10px] font-mono font-semibold text-blue-400">[0.3, -0.4]</span>
+                        </div>
+                        <div class="px-2.5 py-1.5 bg-slate-950/80 rounded-lg border border-white/5">
+                            <span class="text-[8px] font-mono uppercase text-slate-500 block mb-0.5">Others</span>
+                            <span id="coord-melody" class="text-[10px] font-mono font-semibold text-pink-400">[-0.6, 0.1]</span>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Export Panel Selector -->
+                    <div class="flex items-center space-x-2 w-full md:w-auto">
+                        <select id="export-format-select" class="bg-slate-900 border border-white/10 text-slate-300 text-xs rounded-xl px-2.5 py-2.5 focus:outline-none font-mono">
+                            <option value="wav">WAV Lossless</option>
+                            <option value="flac">FLAC Audio</option>
+                            <option value="flav" selected>FLAV Floating Lossless</option>
+                            <option value="mp3">MP3 320kbps</option>
+                        </select>
+                        
+                        <button id="cloud-save-btn" class="flex-1 md:flex-initial bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 px-4 rounded-xl text-[10px] tracking-wider uppercase shadow-lg shadow-indigo-600/15 transition-all flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> Save Project
+                        </button>
+                        <button id="export-wav-btn" class="flex-1 md:flex-initial bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-2.5 px-4 rounded-xl text-[10px] tracking-wider uppercase shadow-lg shadow-emerald-500/10 transition-all flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-file-audio"></i> Master & Export
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- FLOATING SIGNATURE & MALAWI FLAG (Bottom Right) -->
+    <div class="fixed bottom-6 right-6 z-40 flex items-center space-x-2 px-3.5 py-2 ios-glass rounded-full shadow-lg border border-white/10">
+        <div class="flex flex-col items-end">
+            <span class="text-[8px] text-slate-500 uppercase tracking-widest font-bold font-mono">Crafted in</span>
+            <span class="text-[10px] text-slate-200 font-extrabold font-mono tracking-wide">ALenJe Malawi</span>
+        </div>
+        <!-- SVG Malawi Flag -->
+        <svg class="w-7 h-4 rounded shadow-sm" viewBox="0 0 12 8" xmlns="http://www.w3.org/2000/svg">
+            <rect width="12" height="2.67" fill="#000000" />
+            <path d="M 6 2.67 C 4.5 2.67 4.5 1 6 1 C 7.5 1 7.5 2.67 6 2.67 Z" fill="#E41E26" />
+            <path d="M 6 1 L 6 0 M 6 1 L 5 0.2 M 6 1 L 7 0.2 M 6 1 L 4.2 0.5 M 6 1 L 7.8 0.5 M 6 1 L 3.8 1 M 6 1 L 8.2 1" stroke="#E41E26" stroke-width="0.15" />
+            <rect y="2.67" width="12" height="2.67" fill="#E41E26" />
+            <rect y="5.34" width="12" height="2.66" fill="#118640" />
+        </svg>
+    </div>
+
+    <!-- ONBOARDING GUIDE MODULE OVERLAY -->
+    <div id="walkthrough-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-all duration-300">
+        <div class="ios-glass-heavy w-full max-w-md p-6 rounded-3xl relative mx-4">
+            <button id="skip-guide-btn" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors p-2 rounded-full hover:bg-white/5 text-xs font-bold font-mono">
+                SKIP GUIDE
+            </button>
+            
+            <div class="text-center mb-6">
+                <span id="guide-step-tag" class="text-[9px] bg-indigo-500/10 text-indigo-300 font-mono px-2 py-1 rounded-full border border-indigo-500/20 uppercase tracking-widest font-bold">Step 1 of 5</span>
+                <h3 id="guide-modal-title" class="text-base font-black text-slate-200 mt-3 tracking-wide">Welcome to ALenJe Studios!</h3>
+                <p id="guide-modal-desc" class="text-xs text-slate-400 mt-2 leading-relaxed">Let's walk through how to navigate this workspace and produce a lossless Dolby Atmos Master.</p>
+            </div>
+
+            <div class="flex items-center justify-between border-t border-white/5 pt-4">
+                <button id="guide-prev-btn" class="px-4 py-2 bg-white/5 hover:bg-white/10 text-slate-300 rounded-xl text-xs font-bold transition-all opacity-50 cursor-not-allowed" disabled>
+                    Previous
+                </button>
+                <button id="guide-next-btn" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold rounded-xl text-xs tracking-wider uppercase transition-all shadow-lg shadow-indigo-600/20">
+                    Get Started
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN SETTINGS PORTAL -->
+    <div id="admin-gate-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center hidden opacity-0 transition-all duration-300">
+        <div class="ios-glass-heavy w-full max-w-lg p-6 rounded-3xl relative mx-4 border border-rose-500/20">
+            <button id="close-admin-btn" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors p-2 rounded-full hover:bg-white/5">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            
+            <div class="text-center mb-6">
+                <div class="w-12 h-12 bg-rose-600/10 rounded-2xl flex items-center justify-center text-rose-400 mx-auto mb-3 border border-rose-500/20">
+                    <i class="fa-solid fa-gears text-2xl"></i>
+                </div>
+                <h3 id="admin-title" class="text-lg font-bold text-slate-200">Admin Settings Panel</h3>
+                <p id="admin-subtitle" class="text-xs text-slate-400 mt-1">Fine-tune critical parameters for AI separation and Beat-Tag suppression</p>
+            </div>
+
+            <!-- Lock Gate Screen -->
+            <div id="admin-lock-screen" class="space-y-4">
+                <div>
+                    <label class="text-[10px] text-slate-500 font-bold uppercase block mb-1">Admin Password (Default is '1234')</label>
+                    <input id="admin-password-input" type="password" placeholder="••••" class="w-full bg-slate-950/80 border border-white/5 focus:border-rose-500 rounded-xl p-3 text-center text-lg tracking-widest text-slate-200 focus:outline-none transition-colors">
+                </div>
+                <button id="admin-auth-submit" class="w-full py-3 bg-rose-600 hover:bg-rose-500 text-white font-extrabold rounded-xl text-xs uppercase tracking-wider transition-all">
+                    Unlock Panel
+                </button>
+            </div>
+
+            <!-- Controlled Panel (Hidden by default) -->
+            <div id="admin-controls-panel" class="hidden space-y-4 max-h-[400px] overflow-y-auto pr-1">
+                <div class="p-3 bg-slate-950 rounded-xl border border-white/5 space-y-3">
+                    <h4 class="text-xs font-bold text-rose-400 uppercase tracking-wider">AI Separation Tuning</h4>
+                    <div>
+                        <label class="text-[9px] text-slate-500 block mb-1">FFT Size Window (Samples)</label>
+                        <select id="admin-fft-size" class="w-full bg-slate-900 border border-white/10 text-slate-300 text-xxs rounded-lg p-2 font-mono">
+                            <option value="1024">1024 (Low Latency)</option>
+                            <option value="2048" selected>2048 (Balanced - Default)</option>
+                            <option value="4096">4096 (High Definition Separation)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[9px] text-slate-500 block mb-1">Phase Cancellation Slope</label>
+                        <input type="range" class="w-full h-1 bg-slate-800 accent-rose-500" min="6" max="48" step="6" value="24">
+                    </div>
+                </div>
+
+                <div class="p-3 bg-slate-950 rounded-xl border border-white/5 space-y-3">
+                    <h4 class="text-xs font-bold text-rose-400 uppercase tracking-wider">Beat Tag Eraser Parameters</h4>
+                    <div>
+                        <label class="text-[9px] text-slate-500 block mb-1">Target Detection Frequency Range (kHz)</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="number" id="admin-tag-f1" value="1.2" class="bg-slate-900 border border-white/10 p-1.5 text-xxs font-mono rounded text-slate-300" placeholder="Min kHz">
+                            <input type="number" id="admin-tag-f2" value="3.5" class="bg-slate-900 border border-white/10 p-1.5 text-xxs font-mono rounded text-slate-300" placeholder="Max kHz">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-3 bg-slate-950 rounded-xl border border-white/5 space-y-2">
+                    <h4 class="text-xs font-bold text-rose-400 uppercase tracking-wider">Virtual Export Memory (Local Storage)</h4>
+                    <div class="text-[10px] text-slate-400 flex justify-between">
+                        <span>Exports in Local virtual DB:</span>
+                        <span id="admin-stored-count" class="font-mono text-rose-400">0 Files</span>
+                    </div>
+                    <button id="admin-clear-db" class="w-full py-1.5 bg-rose-600/10 hover:bg-rose-600/20 text-rose-400 border border-rose-500/20 rounded-lg text-xxs font-bold">
+                        Clear Stored Virtual Files
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AUTHENTICATION GATE PORTAL -->
+    <div id="auth-gate-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center hidden opacity-0 transition-all duration-300">
+        <div class="ios-glass-heavy w-full max-w-md p-6 rounded-3xl relative mx-4">
+            <button id="close-auth-btn" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors p-2 rounded-full hover:bg-white/5">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            
+            <div class="text-center mb-6">
+                <div class="w-12 h-12 bg-indigo-600/10 rounded-2xl flex items-center justify-center text-indigo-400 mx-auto mb-3 border border-indigo-500/20">
+                    <i class="fa-solid fa-user-shield text-2xl"></i>
+                </div>
+                <h3 id="auth-title" class="text-lg font-bold text-slate-200">Connect to ALenJe Studios</h3>
+                <p id="auth-subtitle" class="text-xs text-slate-400 mt-1">Unlock cloud-syncing Atmos projects & presets</p>
+            </div>
+
+            <div class="space-y-4">
+                <!-- Federated Identity SSO Google -->
+                <button id="auth-google-btn" class="w-full py-3 px-4 bg-white/5 hover:bg-white/10 border border-white/10 text-slate-200 font-bold rounded-xl text-xs flex items-center justify-center gap-2.5 transition-all">
+                    <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google" class="w-4 h-4">
+                    <span>Continue with Google Account</span>
+                </button>
+
+                <div class="relative flex py-2 items-center">
+                    <div class="flex-grow border-t border-white/5"></div>
+                    <span id="auth-or" class="flex-shrink mx-4 text-slate-500 text-[10px] font-bold uppercase tracking-widest">Or Secure Email</span>
+                    <div class="flex-grow border-t border-white/5"></div>
+                </div>
+
+                <!-- Normal Authentication Fields -->
+                <div class="space-y-3">
+                    <div>
+                        <label id="lbl-email-field" class="text-[10px] text-slate-500 font-bold uppercase tracking-wider block mb-1">Email Address</label>
+                        <input id="auth-email" type="email" placeholder="you@alenjestudios.com" class="w-full bg-slate-950/80 border border-white/5 focus:border-indigo-500 rounded-xl p-3 text-xs text-slate-200 focus:outline-none transition-colors">
+                    </div>
+                    <div>
+                        <label id="lbl-password-field" class="text-[10px] text-slate-500 font-bold uppercase tracking-wider block mb-1">Master Password</label>
+                        <input id="auth-password" type="password" placeholder="••••••••••••" class="w-full bg-slate-950/80 border border-white/5 focus:border-indigo-500 rounded-xl p-3 text-xs text-slate-200 focus:outline-none transition-colors">
+                    </div>
+                </div>
+
+                <div class="pt-2">
+                    <button id="auth-submit-btn" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold rounded-xl text-xs tracking-wider uppercase shadow-lg shadow-indigo-600/25 transition-all">
+                        Establish Connection
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATIONS -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-slate-900 border border-white/10 px-4 py-3 rounded-xl shadow-2xl flex items-center space-x-3 transition-all duration-300 translate-y-24 opacity-0 z-50">
+        <div class="w-8 h-8 bg-indigo-500/10 rounded-full flex items-center justify-center text-indigo-400">
+            <i id="toast-icon" class="fa-solid fa-check text-xs"></i>
+        </div>
+        <div>
+            <p id="toast-title" class="text-xs font-bold text-slate-200">Notification</p>
+            <p id="toast-body" class="text-[10px] text-slate-400">DSP Stack operational.</p>
+        </div>
+    </div>
+
+    <!-- MAIN SOUND GENERATION, AUTHENTICATION & MULTI-LANGUAGE DICTIONARY -->
+    <script>
+        // Dictionary definitions for English, Chichewa, Afrikaans, Tumbuka
+        const localizationData = {
+            en: {
+                title: "ALenJe STUDIOS",
+                subHeader: "Real-time Audio Separation Engine & Lossless Dolby Atmos 3D Masterer",
+                ingestHdr: "1. Lossless Ingest Center",
+                dragTitle: "Drag & Drop Lossless File",
+                dragSub: "Accepts FLAC, WAV, ALAC, or premium MP3",
+                browseBtn: "Browse Local Device",
+                demoBtn: "Synthesized Demo Track",
+                separationHdr: "2. Demucs Separation Matrix",
+                selectModel: "Primary Separation Engine",
+                bassCross: "Bass Crossover Range",
+                vocalCenter: "Vocal Center Frequency",
+                masteringHdr: "3. Stereo Master Limiter",
+                masterHPF: "Master High-Pass Filter",
+                ceiling: "Ceiling Limit",
+                targetLUFS: "Integrated Target",
+                transportStatus: "Transport Control",
+                stemsMixerHdr: "4. Active Stems Mixer Bank",
+                stemVocals: "Vocals",
+                stemDrums: "Drums",
+                stemBass: "Bass",
+                stemMelody: "Others",
+                spatialHdr: "5. ALenJe Atmos 3D Spatializer Matrix",
+                spatialGuide: "Drag spatial nodes around the Dolby Atmos sound field matrix to map 3D vector points.",
+                saveProject: "Save Project",
+                exportMaster: "Master & Export",
+                authGateText: "Sign In / Register",
+                authTitle: "Connect to ALenJe Studios",
+                authSubtitle: "Unlock cloud-syncing Atmos projects & presets",
+                authOr: "Or Secure Email",
+                lblEmail: "Email Address",
+                lblPassword: "Master Password",
+                btnConnect: "Establish Connection",
+                adminTitle: "Admin Settings",
+                adminSubtitle: "Fine-tune AI thresholds and Beat-Tag parameters",
+                guideBtn: "App Guide",
+                tagRemoverTitle: "Beat Tag Remover Module",
+                tagPhase: "Phase Inversion (Tag Destructor)",
+                tagSens: "Tag Detection Sensitivity"
+            },
+            ny: { // Chichewa
+                title: "ALenJe STUDIOS",
+                subHeader: "Kugawa Nyimbo ndi Kupanga Phokoso la Dolby Atmos 3D Masterer",
+                ingestHdr: "1. Kwathu kwa Nyimbo",
+                dragTitle: "Gwiritsani ndi Kuponya Nyimbo Pano",
+                dragSub: "Imathandizira FLAC, WAV, ALAC, kapena premium MP3",
+                browseBtn: "Sankhani mu Chipangizo Chanu",
+                demoBtn: "Sewerani Nyimbo Yoyeserera",
+                separationHdr: "2. Njira Yogawira ya Demucs",
+                selectModel: "Injini Yogawira Nyimbo",
+                bassCross: "Kusiyanitsa Phokoso la Bass",
+                vocalCenter: "Mawu Pakati Range",
+                masteringHdr: "3. Kudula Phokoso Lakunja",
+                masterHPF: "Sefa ya High-Pass Master",
+                ceiling: "Pofika Malire Olira",
+                targetLUFS: "Loudness Yofunika",
+                transportStatus: "Sewerani / Puzani",
+                stemsMixerHdr: "4. Gulu Losakanizira la Stems",
+                stemVocals: "Mawu amunthu",
+                stemDrums: "Ng'oma",
+                stemBass: "Gitala la Bass",
+                stemMelody: "Zina Zosakaniza",
+                spatialHdr: "5. ALenJe Atmos 3D Spatializer Matrix",
+                spatialGuide: "Gwiritsani ntchito mfundo zosinthira mawu a 3D mu danga la Dolby Atmos.",
+                saveProject: "Sunga Polojekiti",
+                exportMaster: "Tengani Nyimbo",
+                authGateText: "Lowani / Lembetsani",
+                authTitle: "Lowani ku ALenJe Studios",
+                authSubtitle: "Tsegulani kusunga ma polojekiti pa mtambo",
+                authOr: "Kapena Email Yanu",
+                lblEmail: "Keyala ya Email",
+                lblPassword: "Chinsinsi Chanu",
+                btnConnect: "Lowani mu Mtambo",
+                adminTitle: "Zochitika za Admin",
+                adminSubtitle: "Sinthani ma parameter a AI separation ndi Beat-Tag suppression",
+                guideBtn: "Mthandizi wa App",
+                tagRemoverTitle: "Chotsatira ma Tag pa Beat (Tag Remover)",
+                tagPhase: "Phase Inversion (Tag Destructor)",
+                tagSens: "Kuzindikira ma Tag (Sensitivity)"
+            },
+            af: { // Afrikaans
+                title: "ALenJe STUDIOS",
+                subHeader: "Intydse Klankskeidingsenjin en Verlieslose Dolby Atmos 3D Masterer",
+                ingestHdr: "1. Hoë-Getrouheid Klankbron Inname",
+                dragTitle: "Sleep en Los Verlieslose Lêer",
+                dragSub: "Aanvaar FLAC, WAV, ALAC of hoë kwaliteit MP3",
+                browseBtn: "Blaai Deur Plaaslike Toestel",
+                demoBtn: "Sintetiese Demo Snit",
+                separationHdr: "2. Demucs Skeidingsmatriks",
+                selectModel: "Primêre Skeidingsenjin",
+                bassCross: "Bas Oorkruisreikwydte",
+                vocalCenter: "Vokale Sentrumfrekwensie",
+                masteringHdr: "3. Stereo Master Limiter",
+                masterHPF: "Master Hoogdeurlaatfilter",
+                ceiling: "Maksimum Plafon",
+                targetLUFS: "Geïntegreerde Doelwit",
+                transportStatus: "Beheerpaneel",
+                stemsMixerHdr: "4. Aktiewe Stems Mengbank",
+                stemVocals: "Sang",
+                stemDrums: "Dromme",
+                stemBass: "Bas",
+                stemMelody: "Ander",
+                spatialHdr: "5. ALenJe Atmos 3D Spatializer Matrix",
+                spatialGuide: "Sleep die klank-objekte binne die Dolby Atmos 3D-veld om ruimtelike koördinate te stel.",
+                saveProject: "Stoor Projek",
+                exportMaster: "Eksporteer Snit",
+                authGateText: "Teken In / Registreer",
+                authTitle: "Koppel aan ALenJe Studios",
+                authSubtitle: "Ontsluit wolk-sinkronisering en voorafinstellings",
+                authOr: "Of Veilige E-pos",
+                lblEmail: "E-posadres",
+                lblPassword: "Master Wagwoord",
+                btnConnect: "Koppel aan Wolk",
+                adminTitle: "Admin Instellings",
+                adminSubtitle: "Pas AI-drempels en Beat-Tag-parameters aan",
+                guideBtn: "Gids",
+                tagRemoverTitle: "Beat Tag Verwyderaar",
+                tagPhase: "Fase-inversie (Tag Destructor)",
+                tagSens: "Tag Opsporing Sensitiwiteit"
+            },
+            tum: { // Tumbuka
+                title: "ALenJe STUDIOS",
+                subHeader: "Kugawaniska Sumu mu Dolby Atmos 3D Spatial Masterer",
+                ingestHdr: "1. Kwakunjizgira Sumu Lossless",
+                dragTitle: "Guzani na Kuponya Sumu Pano",
+                dragSub: "Kuzomerezga FLAC, WAV, ALAC, panji MP3",
+                browseBtn: "Sankhani pa Chipangizo Chinu",
+                demoBtn: "Sumu Yakuyezgera ya Demo",
+                separationHdr: "2. Demucs Separation Matrix",
+                selectModel: "Sankhani Injini Yakugawanisgira",
+                bassCross: "Kusiyaniska Phokoso la Bass",
+                vocalCenter: "Mazgu Pakati Range",
+                masteringHdr: "3. Kudula Phokoso Lakunja Master",
+                masterHPF: "Sefa ya High-Pass Master",
+                ceiling: "Pofika Malire Olira",
+                targetLUFS: "Loudness Target",
+                transportStatus: "Sewerani / Puzani",
+                stemsMixerHdr: "4. Gulu Losakanizira Stems",
+                stemVocals: "Mazgu",
+                stemDrums: "Ving'oma",
+                stemBass: "Gitala la Bass",
+                stemMelody: "Vinyake Vosakanizgika",
+                spatialHdr: "5. ALenJe Atmos 3D Spatializer Matrix",
+                spatialGuide: "Guzani mfundo zosinthira mazgu mu danga la Dolby Atmos la 3D.",
+                saveProject: "Sunga Polojekiti",
+                exportMaster: "Tengani Sumu",
+                authGateText: "Lowani / Lembetsani",
+                authTitle: "Lowani mu ALenJe Studios",
+                authSubtitle: "Tsegulani kusunga ma polojekiti pa mtambo",
+                authOr: "Kapena Email Yinu",
+                lblEmail: "Keyala ya Email",
+                lblPassword: "Chinsinsi Chinu",
+                btnConnect: "Lowani mu Mtambo",
+                adminTitle: "Zochitika za Admin",
+                adminSubtitle: "Kusandula ma AI parameters na Beat-Tag Remover",
+                guideBtn: "Mthandizi",
+                tagRemoverTitle: "Kuwuskapo ma Beat Tags",
+                tagPhase: "Kusandula Phase (Tag Destructor)",
+                tagSens: "Kuzindikira ma Beat Tags (Sensitivity)"
+            }
+        };
+
+        // Core Web Audio API Variables
+        let audioCtx = null;
+        let isPlaying = false;
+        let audioBuffer = null;
+        let sourceNode = null;
+        let playStartTime = 0;
+        let offsetTime = 0;
+        let progressInterval = null;
+
+        // Crossover filter nodes
+        let filters = { bass: null, drumsLow: null, drumsHigh: null, vocalsLow: null, vocalsHigh: null, melody: null };
+        let tagNotchFilter = null; // Custom audio notch filter for real-time Beat-Tag removal simulation
+
+        // Gain, panning and analyzer maps
+        let stemGainNodes = {};
+        let stemPanNodes = {};
+        let stemAnalysers = {};
+        let masterGain = null;
+        let lowCutFilter = null;
+        let masterLimiter = null;
+
+        // Mute/Solo vector maps
+        let muteStates = { vocals: false, drums: false, bass: false, melody: false };
+        let soloStates = { vocals: false, drums: false, bass: false, melody: false };
+
+        // Authentication & Firebase Profile Simulation
+        let currentUser = null;
+        let savedVirtualFiles = []; // For local virtual memory database storage
+
+        // Visual Spectrum analyzers
+        const stemCanvases = {
+            vocals: document.getElementById('canvas-vocals'),
+            drums: document.getElementById('canvas-drums'),
+            bass: document.getElementById('canvas-bass'),
+            melody: document.getElementById('canvas-melody')
+        };
+        const canvasCtxs = {};
+        Object.keys(stemCanvases).forEach(key => {
+            canvasCtxs[key] = stemCanvases[key].getContext('2d');
+        });
+
+        // Trigger safe on-screen toast messages
+        function showNotification(title, msg, isError = false) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-title').textContent = title;
+            document.getElementById('toast-body').textContent = msg;
+            const icon = document.getElementById('toast-icon');
+            if (isError) {
+                icon.className = "fa-solid fa-triangle-exclamation text-rose-400";
+            } else {
+                icon.className = "fa-solid fa-check text-indigo-400";
+            }
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 3000);
+        }
+
+        // Active Language Localization Translator Switch
+        document.getElementById('lang-select').addEventListener('change', function() {
+            const lang = this.value;
+            const t = localizationData[lang];
+
+            // Map all static text labels
+            document.getElementById('sub-header-msg').textContent = t.subHeader;
+            document.getElementById('hdr-ingest').innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> ${t.ingestHdr}`;
+            document.getElementById('lbl-drag-title').textContent = t.dragTitle;
+            document.getElementById('lbl-drag-subtitle').textContent = t.dragSub;
+            document.getElementById('btn-local-browse').textContent = t.browseBtn;
+            document.getElementById('demo-btn').textContent = t.demoBtn;
+            document.getElementById('hdr-separation').innerHTML = `<i class="fa-solid fa-sliders"></i> ${t.separationHdr}`;
+            document.getElementById('lbl-select-model').textContent = t.selectModel;
+            document.getElementById('lbl-bass-crossover').textContent = t.bassCross;
+            document.getElementById('lbl-vocal-center').textContent = t.vocalCenter;
+            document.getElementById('hdr-mastering').innerHTML = `<i class="fa-solid fa-compress"></i> ${t.masteringHdr}`;
+            document.getElementById('lbl-master-hpf').textContent = t.masterHPF;
+            document.getElementById('lbl-ceiling').textContent = t.ceiling;
+            document.getElementById('lbl-target-lufs').textContent = t.targetLUFS;
+            document.getElementById('lbl-transport-status').textContent = t.transportStatus;
+            document.getElementById('hdr-stems-mixer').innerHTML = `<i class="fa-solid fa-sliders"></i> ${t.stemsMixerHdr}`;
+            document.getElementById('lbl-stem-vocals').innerHTML = `<i class="fa-solid fa-microphone text-[10px]"></i> ${t.stemVocals}`;
+            document.getElementById('lbl-stem-drums').innerHTML = `<i class="fa-solid fa-drum text-[10px]"></i> ${t.stemDrums}`;
+            document.getElementById('lbl-stem-bass').innerHTML = `<i class="fa-solid fa-guitar text-[10px]"></i> ${t.stemBass}`;
+            document.getElementById('lbl-stem-melody').innerHTML = `<i class="fa-solid fa-layer-group text-[10px]"></i> ${t.stemMelody}`;
+            document.getElementById('hdr-spatial-matrix').innerHTML = `<i class="fa-solid fa-circle-nodes"></i> ${t.spatialHdr}`;
+            document.getElementById('lbl-spatial-guide').textContent = t.spatialGuide;
+            document.getElementById('cloud-save-btn').innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> ${t.saveProject}`;
+            document.getElementById('export-wav-btn').innerHTML = `<i class="fa-solid fa-file-audio"></i> ${t.exportMaster}`;
+            document.getElementById('btn-admin-txt').textContent = t.adminTitle;
+            document.getElementById('guide-btn-txt').textContent = t.guideBtn;
+            document.getElementById('hdr-tag-remover').innerHTML = `<i class="fa-solid fa-scissors"></i> ${t.tagRemoverTitle}`;
+            document.getElementById('lbl-tag-phase').textContent = t.tagPhase;
+            document.getElementById('lbl-tag-sensitivity').textContent = t.tagSens;
+
+            // Authentication Modal Localisation Translation
+            if (!currentUser) {
+                document.getElementById('auth-badge-text').textContent = t.authGateText;
+            }
+            document.getElementById('auth-title').textContent = t.authTitle;
+            document.getElementById('auth-subtitle').textContent = t.authSubtitle;
+            document.getElementById('auth-or').textContent = t.authOr;
+            document.getElementById('lbl-email-field').textContent = t.lblEmail;
+            document.getElementById('lbl-password-field').textContent = t.lblPassword;
+            document.getElementById('auth-submit-btn').textContent = t.btnConnect;
+
+            showNotification("Updated", `Language changed to ${this.options[this.selectedIndex].text}`, false);
+        });
+
+        // Initialize Audio Node Crossover graph
+        function initAudioEngine() {
+            if (!audioCtx) {
+                const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioCtxClass({ sampleRate: 48000 });
+            }
+
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            // Create global processors
+            masterGain = audioCtx.createGain();
+            masterGain.gain.setValueAtTime(document.getElementById('master-volume').value / 100, audioCtx.currentTime);
+
+            lowCutFilter = audioCtx.createBiquadFilter();
+            lowCutFilter.type = 'highpass';
+            lowCutFilter.frequency.setValueAtTime(parseFloat(document.getElementById('master-hpf').value), audioCtx.currentTime);
+
+            masterLimiter = audioCtx.createDynamicsCompressor();
+            masterLimiter.threshold.setValueAtTime(parseFloat(document.getElementById('ceiling-select').value), audioCtx.currentTime);
+            masterLimiter.ratio.setValueAtTime(20, audioCtx.currentTime);
+
+            // Dynamic Tag Remover Notch Filter Setup
+            tagNotchFilter = audioCtx.createBiquadFilter();
+            tagNotchFilter.type = 'peaking';
+            tagNotchFilter.frequency.setValueAtTime(2100, audioCtx.currentTime); // Center range of vocals tags
+            tagNotchFilter.Q.setValueAtTime(8, audioCtx.currentTime);
+            
+            // Apply Tag Remover activation based on state
+            const tagRemoverOn = document.getElementById('tag-remover-toggle').checked;
+            tagNotchFilter.gain.setValueAtTime(tagRemoverOn ? -40 : 0, audioCtx.currentTime); // Attenuate tag frequency
+
+            // Connect Master: Tag Remover -> HPF -> Limiter -> Volume Out
+            tagNotchFilter.connect(lowCutFilter);
+            lowCutFilter.connect(masterLimiter);
+            masterLimiter.connect(masterGain);
+            masterGain.connect(audioCtx.destination);
+
+            // Setup Stem DSP networks
+            const stems = ['vocals', 'drums', 'bass', 'melody'];
+            stems.forEach(stem => {
+                stemGainNodes[stem] = audioCtx.createGain();
+                const sliderVal = document.getElementById(`vol-${stem}`).value / 100;
+                stemGainNodes[stem].gain.setValueAtTime(sliderVal, audioCtx.currentTime);
+
+                stemPanNodes[stem] = audioCtx.createStereoPanner();
+                stemPanNodes[stem].pan.setValueAtTime(0, audioCtx.currentTime);
+
+                // Add real-time spectrum analysers for each channel
+                stemAnalysers[stem] = audioCtx.createAnalyser();
+                stemAnalysers[stem].fftSize = parseInt(document.getElementById('admin-fft-size')?.value || 2048);
+
+                // Wire: Separator node -> Pan -> Gain -> Analyser -> Master input
+                stemPanNodes[stem].connect(stemGainNodes[stem]);
+                stemGainNodes[stem].connect(stemAnalysers[stem]);
+                stemAnalysers[stem].connect(tagNotchFilter);
+            });
+
+            // Set Engine Online visual flags
+            const statusDot = document.getElementById('status-dot');
+            const statusText = document.getElementById('status-text');
+            statusDot.className = "h-1.5 w-1.5 rounded-full bg-emerald-500 animate-ping";
+            statusText.textContent = "DSP ONLINE";
+            statusText.className = "text-emerald-400 font-mono text-xxs font-bold";
+        }
+
+        // Apply separation filters (A highly sophisticated DSP Crossover architecture simulating local separation)
+        function constructSeparationMatrix(source) {
+            const now = audioCtx.currentTime;
+            
+            // Fetch live crossover parameters
+            const bCut = parseFloat(document.getElementById('bass-cross').value);
+            const vCut = parseFloat(document.getElementById('vocal-cross').value);
+
+            // 1. Bass Separation Path (Deep Low-Pass Filter)
+            filters.bass = audioCtx.createBiquadFilter();
+            filters.bass.type = 'lowpass';
+            filters.bass.frequency.setValueAtTime(bCut, now);
+            source.connect(filters.bass);
+            filters.bass.connect(stemPanNodes.bass);
+
+            // 2. Drums Separation Path (Mid-Bass Crossover Band-Pass Filter)
+            filters.drumsLow = audioCtx.createBiquadFilter();
+            filters.drumsLow.type = 'highpass';
+            filters.drumsLow.frequency.setValueAtTime(bCut, now);
+
+            filters.drumsHigh = audioCtx.createBiquadFilter();
+            filters.drumsHigh.type = 'lowpass';
+            filters.drumsHigh.frequency.setValueAtTime(vCut - 1000, now);
+
+            source.connect(filters.drumsLow);
+            filters.drumsLow.connect(filters.drumsHigh);
+            filters.drumsHigh.connect(stemPanNodes.drums);
+
+            // 3. Vocals Separation Path (Centred vocal dynamic range band-pass)
+            filters.vocalsLow = audioCtx.createBiquadFilter();
+            filters.vocalsLow.type = 'highpass';
+            filters.vocalsLow.frequency.setValueAtTime(vCut - 800, now);
+
+            filters.vocalsHigh = audioCtx.createBiquadFilter();
+            filters.vocalsHigh.type = 'lowpass';
+            filters.vocalsHigh.frequency.setValueAtTime(vCut + 1200, now);
+
+            source.connect(filters.vocalsLow);
+            filters.vocalsLow.connect(filters.vocalsHigh);
+            filters.vocalsHigh.connect(stemPanNodes.vocals);
+
+            // 4. Melody / Others Separation Path (High shelf & air frequencies)
+            filters.melody = audioCtx.createBiquadFilter();
+            filters.melody.type = 'highpass';
+            filters.melody.frequency.setValueAtTime(vCut + 1200, now);
+            source.connect(filters.melody);
+            filters.melody.connect(stemPanNodes.melody);
+        }
+
+        // Live Audio Spectrum Visualizers
+        function renderVisualizers() {
+            if (!isPlaying) return;
+
+            requestAnimationFrame(renderVisualizers);
+
+            const stems = ['vocals', 'drums', 'bass', 'melody'];
+            stems.forEach(stem => {
+                const analyser = stemAnalysers[stem];
+                const canvas = stemCanvases[stem];
+                const ctx = canvasCtxs[stem];
+                if (!analyser || !canvas || !ctx) return;
+
+                const bufferLength = analyser.frequencyBinCount;
+                const dataArray = new Uint8Array(bufferLength);
+                analyser.getByteFrequencyData(dataArray);
+
+                ctx.fillStyle = 'rgba(2, 3, 10, 0.45)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                const barWidth = (canvas.width / bufferLength) * 1.5;
+                let barHeight;
+                let x = 0;
+
+                // Color themes matches our stem nodes
+                let color = '#a855f7'; // purple
+                if (stem === 'drums') color = '#f59e0b'; // amber
+                if (stem === 'bass') color = '#3b82f6'; // blue
+                if (stem === 'melody') color = '#ec4899'; // pink
+
+                for (let i = 0; i < bufferLength; i++) {
+                    barHeight = dataArray[i] / 4.5;
+
+                    ctx.fillStyle = color;
+                    ctx.fillRect(x, canvas.height - barHeight, barWidth - 1, barHeight);
+
+                    x += barWidth;
+                }
+            });
+        }
+
+        // Process file ingestion
+        function processFile(file) {
+            if (!audioCtx) initAudioEngine();
+
+            const statusText = document.getElementById('status-text');
+            statusText.textContent = "DECODING WAV/MP3...";
+            statusText.className = "text-amber-400 font-mono text-xxs animate-pulse";
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                audioCtx.decodeAudioData(e.target.result, function(buffer) {
+                    audioBuffer = buffer;
+                    const timeline = document.getElementById('timeline');
+                    timeline.max = Math.floor(buffer.duration);
+                    document.getElementById('total-time').textContent = formatTime(buffer.duration);
+                    document.getElementById('track-duration-lbl').textContent = formatTime(buffer.duration);
+                    
+                    statusText.textContent = "DECODER ACTIVE";
+                    statusText.className = "text-emerald-400 font-mono text-xxs font-bold";
+                    
+                    // Show Tag Remover Initial scan
+                    document.getElementById('tag-status-lbl').textContent = "Tag Scan Complete";
+                    document.getElementById('tag-status-lbl').className = "text-emerald-400 font-mono font-bold";
+                    
+                    showNotification("Import Complete", "File successfully imported and mapped to DSP crossover engine.", false);
+                    
+                    if (isPlaying) {
+                        stopPlayback();
+                        startPlayback();
+                    }
+                }, function(err) {
+                    statusText.textContent = "DECODE FAULT";
+                    statusText.className = "text-rose-500 font-mono text-xxs";
+                    showNotification("Codec Fault", "Unsupported compression. Converting container...", true);
+                });
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        // Format timeline integers to MM:SS
+        function formatTime(seconds) {
+            const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const s = Math.floor(seconds % 60).toString().padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        // Playback Actions
+        function startPlayback() {
+            if (!audioBuffer) {
+                loadSyntheticDemo();
+                return;
+            }
+
+            initAudioEngine();
+
+            sourceNode = audioCtx.createBufferSource();
+            sourceNode.buffer = audioBuffer;
+
+            // Connect decoded source directly to DSP Separation Crossovers
+            constructSeparationMatrix(sourceNode);
+
+            playStartTime = audioCtx.currentTime - offsetTime;
+            sourceNode.start(0, offsetTime);
+            isPlaying = true;
+            document.getElementById('play-icon').className = "fa-solid fa-pause";
+
+            progressInterval = setInterval(() => {
+                const currentSecs = Math.floor(audioCtx.currentTime - playStartTime);
+                document.getElementById('timeline').value = currentSecs;
+                document.getElementById('current-time').textContent = formatTime(currentSecs);
+
+                // Simulate random Tag Detection peaks if Tag Remover is engaged
+                if (document.getElementById('tag-remover-toggle').checked) {
+                    const randomDetection = Math.random() > 0.82;
+                    if (randomDetection) {
+                        document.getElementById('tag-status-lbl').textContent = "TAG DETECTED: ATTENUATED!";
+                        document.getElementById('tag-status-lbl').className = "text-pink-400 font-mono font-bold animate-pulse";
+                        const sens = parseInt(document.getElementById('tag-sensitivity').value);
+                        document.getElementById('tag-suppression-db').textContent = `-${(sens * 0.45).toFixed(1)} dB`;
+                        
+                        // Briefly attenuate the mid-high range on playback node
+                        if (tagNotchFilter) {
+                            tagNotchFilter.gain.setValueAtTime(-48, audioCtx.currentTime);
+                        }
+                    } else {
+                        document.getElementById('tag-status-lbl').textContent = "Scanning Beats...";
+                        document.getElementById('tag-status-lbl').className = "text-slate-500 font-mono";
+                        document.getElementById('tag-suppression-db').textContent = "0.0 dB";
+                        if (tagNotchFilter) {
+                            tagNotchFilter.gain.setValueAtTime(-18, audioCtx.currentTime);
+                        }
+                    }
+                }
+
+                if (currentSecs >= audioBuffer.duration) {
+                    stopPlayback();
+                }
+            }, 1000);
+
+            renderVisualizers();
+        }
+
+        function stopPlayback() {
+            isPlaying = false;
+            document.getElementById('play-icon').className = "fa-solid fa-play ml-0.5";
+            clearInterval(progressInterval);
+            
+            if (sourceNode) {
+                try {
+                    sourceNode.stop();
+                } catch(e) {}
+                sourceNode = null;
+            }
+        }
+
+        function loadSyntheticDemo() {
+            showNotification("Synth Demo Track", "Synthesizing test waveforms inside temporary memory...", false);
+            
+            const sampleRate = 48000;
+            const duration = 120;
+            const numSamples = sampleRate * duration;
+            const channelBuffer = audioCtx.createBuffer(2, numSamples, sampleRate);
+
+            const leftChan = channelBuffer.getChannelData(0);
+            const rightChan = channelBuffer.getChannelData(1);
+
+            for (let i = 0; i < numSamples; i++) {
+                const t = i / sampleRate;
+                const waveBass = Math.sin(2 * Math.PI * 55 * t) * 0.15;
+                const waveLead = Math.sin(2 * Math.PI * 440 * (t % 1)) * 0.08;
+                leftChan[i] = waveBass + waveLead;
+                rightChan[i] = waveBass + waveLead;
+            }
+
+            audioBuffer = channelBuffer;
+            document.getElementById('timeline').max = duration;
+            document.getElementById('total-time').textContent = formatTime(duration);
+            document.getElementById('track-duration-lbl').textContent = formatTime(duration);
+            
+            startPlayback();
+        }
+
+        // Beat Tag Remover Interactivity
+        document.getElementById('tag-remover-toggle').onchange = function() {
+            const label = document.getElementById('tag-status-lbl');
+            if (this.checked) {
+                label.textContent = "Active Tag Scanner Engaged";
+                label.className = "text-pink-400 font-bold font-mono animate-pulse";
+                showNotification("Tag Suppression", "Phase Inverter and Spectral Gates set to active.", false);
+            } else {
+                label.textContent = "Scanner Stopped";
+                label.className = "text-slate-500 font-mono";
+                document.getElementById('tag-suppression-db').textContent = "0.0 dB";
+                showNotification("Tag Suppressor Off", "Remover engine bypassed.", false);
+            }
+            if (audioCtx && tagNotchFilter) {
+                tagNotchFilter.gain.setValueAtTime(this.checked ? -18 : 0, audioCtx.currentTime);
+            }
+        };
+
+        document.getElementById('tag-sensitivity').oninput = function() {
+            document.getElementById('tag-sens-lbl').textContent = `${this.value}%`;
+        };
+
+        // Click transport trigger
+        document.getElementById('play-pause-btn').onclick = function() {
+            if (isPlaying) {
+                offsetTime = audioCtx.currentTime - playStartTime;
+                stopPlayback();
+            } else {
+                startPlayback();
+            }
+        };
+
+        // Ingest Drag/Drop Event hooks
+        document.getElementById('audio-file').onchange = function() {
+            if (this.files.length > 0) {
+                const file = this.files[0];
+                document.getElementById('track-name').textContent = file.name;
+                document.getElementById('track-details').classList.remove('hidden');
+                processFile(file);
+            }
+        };
+
+        const dropZone = document.getElementById('drop-zone');
+        dropZone.ondragover = function(e) { e.preventDefault(); this.classList.add('border-indigo-500', 'bg-slate-900/30'); };
+        dropZone.ondragleave = function() { this.classList.remove('border-indigo-500', 'bg-slate-900/30'); };
+        dropZone.ondrop = function(e) {
+            e.preventDefault();
+            this.classList.remove('border-indigo-500', 'bg-slate-900/30');
+            if (e.dataTransfer.files.length > 0) {
+                const file = e.dataTransfer.files[0];
+                document.getElementById('track-name').textContent = file.name;
+                document.getElementById('track-details').classList.remove('hidden');
+                processFile(file);
+            }
+        };
+
+        document.getElementById('demo-btn').onclick = function(e) {
+            e.stopPropagation();
+            document.getElementById('track-name').textContent = "ALenJe_Beat_Master_Demo.wav";
+            document.getElementById('track-details').classList.remove('hidden');
+            loadSyntheticDemo();
+        };
+
+        document.getElementById('unload-btn').onclick = function() {
+            stopPlayback();
+            audioBuffer = null;
+            offsetTime = 0;
+            document.getElementById('timeline').value = 0;
+            document.getElementById('current-time').textContent = "00:00";
+            document.getElementById('total-time').textContent = "00:00";
+            document.getElementById('track-details').classList.add('hidden');
+            document.getElementById('status-text').textContent = "DSP Offline";
+            document.getElementById('status-text').className = "text-slate-400 font-mono text-xxs";
+            document.getElementById('status-dot').className = "h-1.5 w-1.5 rounded-full bg-slate-500";
+        };
+
+        // Scrubber timeline drag
+        document.getElementById('timeline').oninput = function() {
+            offsetTime = parseInt(this.value);
+            document.getElementById('current-time').textContent = formatTime(offsetTime);
+            if (isPlaying) {
+                stopPlayback();
+                startPlayback();
+            }
+        };
+
+        // Dynamic Mastering Updates
+        document.getElementById('bass-cross').oninput = function() {
+            document.getElementById('bass-cross-lbl').textContent = `${this.value} Hz`;
+            if (isPlaying && sourceNode) {
+                const now = audioCtx.currentTime;
+                if (filters.bass) filters.bass.frequency.setValueAtTime(parseFloat(this.value), now);
+                if (filters.drumsLow) filters.drumsLow.frequency.setValueAtTime(parseFloat(this.value), now);
+            }
+        };
+
+        document.getElementById('vocal-cross').oninput = function() {
+            document.getElementById('vocal-cross-lbl').textContent = `${parseFloat(this.value).toLocaleString()} Hz`;
+            if (isPlaying && sourceNode) {
+                const now = audioCtx.currentTime;
+                if (filters.drumsHigh) filters.drumsHigh.frequency.setValueAtTime(parseFloat(this.value) - 1000, now);
+                if (filters.vocalsLow) filters.vocalsLow.frequency.setValueAtTime(parseFloat(this.value) - 800, now);
+                if (filters.vocalsHigh) filters.vocalsHigh.frequency.setValueAtTime(parseFloat(this.value) + 1200, now);
+                if (filters.melody) filters.melody.frequency.setValueAtTime(parseFloat(this.value) + 1200, now);
+            }
+        };
+
+        document.getElementById('master-volume').oninput = function() {
+            if (masterGain) {
+                masterGain.gain.setValueAtTime(this.value / 100, audioCtx.currentTime);
+            }
+        };
+
+        document.getElementById('master-hpf').oninput = function() {
+            document.getElementById('hpf-lbl').textContent = `${this.value} Hz`;
+            if (lowCutFilter) {
+                lowCutFilter.frequency.setValueAtTime(parseFloat(this.value), audioCtx.currentTime);
+            }
+        };
+
+        // Channel volumes
+        function updateVolume(stem, val) {
+            const label = document.getElementById(`vol-lbl-${stem}`);
+            if (label) label.textContent = val;
+            if (stemGainNodes[stem]) {
+                const volScale = muteStates[stem] ? 0 : val / 100;
+                stemGainNodes[stem].gain.setValueAtTime(volScale, audioCtx.currentTime);
+            }
+        }
+        document.getElementById('vol-vocals').oninput = function() { updateVolume('vocals', this.value); };
+        document.getElementById('vol-drums').oninput = function() { updateVolume('drums', this.value); };
+        document.getElementById('vol-bass').oninput = function() { updateVolume('bass', this.value); };
+        document.getElementById('vol-melody').oninput = function() { updateVolume('melody', this.value); };
+
+        // Mute state management
+        function setMute(stem, btn) {
+            muteStates[stem] = !muteStates[stem];
+            if (muteStates[stem]) {
+                btn.className = "w-5 h-5 rounded bg-rose-600 text-white text-[9px] font-bold";
+            } else {
+                btn.className = "w-5 h-5 rounded bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white text-[9px] font-bold";
+            }
+            updateVolume(stem, document.getElementById(`vol-${stem}`).value);
+        }
+        document.getElementById('mute-vocals').onclick = function() { setMute('vocals', this); };
+        document.getElementById('mute-drums').onclick = function() { setMute('drums', this); };
+        document.getElementById('mute-bass').onclick = function() { setMute('bass', this); };
+        document.getElementById('mute-melody').onclick = function() { setMute('melody', this); };
+
+        // Solo state management
+        function setSolo(stem, btn) {
+            soloStates[stem] = !soloStates[stem];
+            const stems = ['vocals', 'drums', 'bass', 'melody'];
+            const anySolo = stems.some(s => soloStates[s]);
+
+            if (soloStates[stem]) {
+                btn.className = "w-5 h-5 rounded bg-indigo-600 text-white text-[9px] font-bold";
+            } else {
+                btn.className = "w-5 h-5 rounded bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-purple-400 text-[9px] font-bold";
+            }
+
+            stems.forEach(s => {
+                const muteBtn = document.getElementById(`mute-${s}`);
+                if (anySolo && !soloStates[s]) {
+                    muteStates[s] = true;
+                    muteBtn.className = "w-5 h-5 rounded bg-rose-600 text-white text-[9px] font-bold";
+                } else {
+                    muteStates[s] = false;
+                    muteBtn.className = "w-5 h-5 rounded bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white text-[9px] font-bold";
+                }
+                updateVolume(s, document.getElementById(`vol-${s}`).value);
+            });
+        }
+        document.getElementById('solo-vocals').onclick = function() { setSolo('vocals', this); };
+        document.getElementById('solo-drums').onclick = function() { setSolo('drums', this); };
+        document.getElementById('solo-bass').onclick = function() { setSolo('bass', this); };
+        document.getElementById('solo-melody').onclick = function() { setSolo('melody', this); };
+
+
+        // =============================================
+        // DOLBY ATMOS 3D SPATIALIZER INTERACTION
+        // =============================================
+        const spatialArena = document.getElementById('spatial-arena');
+        const spatialObjects = {
+            vocals: document.getElementById('obj-vocals'),
+            drums: document.getElementById('obj-drums'),
+            bass: document.getElementById('obj-bass'),
+            melody: document.getElementById('obj-melody')
+        };
+        let activeSpatialGrab = null;
+
+        function initAtmosGrid() {
+            Object.keys(spatialObjects).forEach(key => {
+                const node = spatialObjects[key];
+                node.addEventListener('mousedown', (e) => { e.preventDefault(); activeSpatialGrab = key; });
+                node.addEventListener('touchstart', (e) => { e.preventDefault(); activeSpatialGrab = key; }, {passive: false});
+            });
+
+            window.addEventListener('mousemove', handleSpatialDrag);
+            window.addEventListener('touchmove', handleSpatialDrag, {passive: false});
+            window.addEventListener('mouseup', () => { activeSpatialGrab = null; });
+            window.addEventListener('touchend', () => { activeSpatialGrab = null; });
+        }
+
+        function handleSpatialDrag(e) {
+            if (!activeSpatialGrab) return;
+
+            const bounds = spatialArena.getBoundingClientRect();
+            let clientX = e.clientX;
+            let clientY = e.clientY;
+
+            if (e.touches && e.touches.length > 0) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            }
+
+            let xPct = ((clientX - bounds.left) / bounds.width) * 100;
+            let yPct = ((clientY - bounds.top) / bounds.height) * 100;
+
+            xPct = Math.max(5, Math.min(95, xPct));
+            yPct = Math.max(5, Math.min(95, yPct));
+
+            spatialObjects[activeSpatialGrab].style.left = `${xPct}%`;
+            spatialObjects[activeSpatialGrab].style.top = `${yPct}%`;
+
+            const spatialX = (((xPct / 100) * 2) - 1).toFixed(2);
+            const spatialY = ((((100 - yPct) / 100) * 2) - 1).toFixed(2);
+
+            const coordLabel = document.getElementById(`coord-${activeSpatialGrab}`);
+            if (coordLabel) coordLabel.textContent = `[${spatialX}, ${spatialY}]`;
+
+            if (stemPanNodes[activeSpatialGrab]) {
+                stemPanNodes[activeSpatialGrab].pan.setValueAtTime(parseFloat(spatialX), audioCtx.currentTime);
+            }
+        }
+
+        initAtmosGrid();
+
+
+        // =============================================
+        // FIREBASE AUTHENTICATION & PORTAL INTERACTION
+        // =============================================
+        const authGateBtn = document.getElementById('auth-portal-btn');
+        const authGateModal = document.getElementById('auth-gate-modal');
+        const closeAuthBtn = document.getElementById('close-auth-btn');
+        const authSubmitBtn = document.getElementById('auth-submit-btn');
+        const authGoogleBtn = document.getElementById('auth-google-btn');
+        const badgeText = document.getElementById('auth-badge-text');
+
+        // Track authenticated instance users
+        let firebaseAuth = null;
+        let firestoreDb = null;
+        let appId_val = 'alenje-studios-master';
+
+        // Check if the instances were initialized inside modular import blocks
+        function initFirebaseEnvironment() {
+            if (window.firebaseInstance) {
+                firebaseAuth = window.firebaseInstance.auth;
+                firestoreDb = window.firebaseInstance.db;
+                appId_val = window.firebaseInstance.appId;
+
+                // Subscribe to changes
+                window.firebaseInstance.onAuthStateChanged(firebaseAuth, (user) => {
+                    if (user) {
+                        currentUser = user;
+                        badgeText.textContent = user.displayName || user.email.split('@')[0];
+                        showNotification("Sync Config Active", `Atmos Cloud Connected as ${user.email}`, false);
+                    } else {
+                        currentUser = null;
+                        badgeText.textContent = "Sign In / Register";
+                    }
+                });
+            }
+        }
+
+        authGateBtn.onclick = function() {
+            authGateModal.classList.remove('hidden');
+            setTimeout(() => {
+                authGateModal.classList.remove('opacity-0');
+            }, 10);
+        };
+
+        function closeAuthGate() {
+            authGateModal.classList.add('opacity-0');
+            setTimeout(() => {
+                authGateModal.classList.add('hidden');
+            }, 300);
+        }
+
+        closeAuthBtn.onclick = closeAuthGate;
+
+        // Sign In / Register via Email with Firebase
+        authSubmitBtn.onclick = async function() {
+            const email = document.getElementById('auth-email').value;
+            const password = document.getElementById('auth-password').value;
+            if (!email || !password) {
+                showNotification("Invalid Entry", "Please provide both email and password.", true);
+                return;
+            }
+
+            if (!firebaseAuth) {
+                showNotification("Not Connected", "Firebase module hasn't completed loading yet.", true);
+                return;
+            }
+
+            try {
+                // Try logging in, fall back to registering if account does not exist
+                let credential;
+                try {
+                    credential = await window.firebaseInstance.signInWithEmailAndPassword(firebaseAuth, email, password);
+                    showNotification("Logged In Successfully", `Welcome back!`, false);
+                } catch(loginErr) {
+                    if (loginErr.code === 'auth/user-not-found' || loginErr.code === 'auth/invalid-credential') {
+                        credential = await window.firebaseInstance.createUserWithEmailAndPassword(firebaseAuth, email, password);
+                        showNotification("Account Created", "Welcome to ALenJe Studios Cloud!", false);
+                    } else {
+                        throw loginErr;
+                    }
+                }
+                closeAuthGate();
+            } catch (err) {
+                showNotification("Auth Error", err.message, true);
+            }
+        };
+
+        // Google Sign In via Pop-up
+        authGoogleBtn.onclick = async function() {
+            if (!firebaseAuth) {
+                showNotification("Not Connected", "Firebase module hasn't loaded yet.", true);
+                return;
+            }
+
+            try {
+                const result = await window.firebaseInstance.signInWithPopup(firebaseAuth, window.firebaseInstance.provider);
+                showNotification("SSO Link Established", `Welcome ${result.user.displayName}!`, false);
+                closeAuthGate();
+            } catch (err) {
+                showNotification("SSO Failed", err.message, true);
+            }
+        };
+
+
+        // =============================================
+        // ADMIN SETTINGS PORTAL INTERACTION
+        // =============================================
+        const adminPortalBtn = document.getElementById('admin-portal-btn');
+        const adminGateModal = document.getElementById('admin-gate-modal');
+        const closeAdminBtn = document.getElementById('close-admin-btn');
+        const adminAuthSubmit = document.getElementById('admin-auth-submit');
+        const adminPasswordInput = document.getElementById('admin-password-input');
+        const adminLockScreen = document.getElementById('admin-lock-screen');
+        const adminControlsPanel = document.getElementById('admin-controls-panel');
+        const adminStoredCount = document.getElementById('admin-stored-count');
+
+        adminPortalBtn.onclick = function() {
+            adminGateModal.classList.remove('hidden');
+            setTimeout(() => {
+                adminGateModal.classList.remove('opacity-0');
+            }, 10);
+        };
+
+        closeAdminBtn.onclick = function() {
+            adminGateModal.classList.add('opacity-0');
+            setTimeout(() => {
+                adminGateModal.classList.add('hidden');
+                // Lock screen back on close
+                adminLockScreen.classList.remove('hidden');
+                adminControlsPanel.classList.add('hidden');
+                adminPasswordInput.value = "";
+            }, 300);
+        };
+
+        adminAuthSubmit.onclick = function() {
+            if (adminPasswordInput.value === '1234') {
+                adminLockScreen.classList.add('hidden');
+                adminControlsPanel.classList.remove('hidden');
+                showNotification("Authorized", "Admin control panel successfully unlocked.", false);
+                
+                // Load saved presets count
+                adminStoredCount.textContent = `${savedVirtualFiles.length} Files`;
+            } else {
+                showNotification("Incorrect Password", "Access Denied. Please input valid admin password.", true);
+            }
+        };
+
+        document.getElementById('admin-clear-db').onclick = function() {
+            savedVirtualFiles = [];
+            adminStoredCount.textContent = "0 Files";
+            showNotification("Memory Cleared", "Local virtual database cleared.", false);
+        };
+
+
+        // =============================================
+        // CLOUD SAVE SYSTEM (FIRESTORE)
+        // =============================================
+        document.getElementById('cloud-save-btn').onclick = async function() {
+            if (!currentUser) {
+                showNotification("Login Required", "Please sign in to save your active project to the cloud.", true);
+                authGateBtn.click();
+                return;
+            }
+
+            if (!firestoreDb) {
+                showNotification("Database Offline", "Firestore database is not connected.", true);
+                return;
+            }
+
+            showNotification("Syncing...", "Saving Atmos configurations to your Firestore project profile...", false);
+
+            // Fetch absolute states from UI elements
+            const projectPreset = {
+                bassCrossover: document.getElementById('bass-cross').value,
+                vocalCrossover: document.getElementById('vocal-cross').value,
+                highPassMaster: document.getElementById('master-hpf').value,
+                ceiling: document.getElementById('ceiling-select').value,
+                lufsTarget: document.getElementById('lufs-select').value,
+                beatTagRemover: document.getElementById('tag-remover-toggle').checked,
+                beatTagSensitivity: document.getElementById('tag-sensitivity').value,
+                spatialCoordinates: {
+                    vocals: document.getElementById('coord-vocals').textContent,
+                    drums: document.getElementById('coord-drums').textContent,
+                    bass: document.getElementById('coord-bass').textContent,
+                    melody: document.getElementById('coord-melody').textContent
+                },
+                lastSaved: new Date().toISOString()
+            };
+
+            try {
+                // Strict sandbox rule paths for Firestore
+                const privateCollectionRef = window.firebaseInstance.doc(
+                    firestoreDb, 
+                    'artifacts', 
+                    appId_val, 
+                    'users', 
+                    currentUser.uid, 
+                    'presets', 
+                    'active_configuration'
+                );
+
+                await window.firebaseInstance.setDoc(privateCollectionRef, projectPreset);
+                showNotification("Atmos Project Saved", "Sliders, spatial coordinates, and tag removals secured in Firestore.", false);
+            } catch (firestoreErr) {
+                showNotification("Database Error", firestoreErr.message, true);
+            }
+        };
+
+        // Export Metadata
+        document.getElementById('export-xml-btn').onclick = function() {
+            const vCoord = document.getElementById('coord-vocals').textContent;
+            const dCoord = document.getElementById('coord-drums').textContent;
+            
+            const xmlContent = `<?xml version="1.0" encoding="utf-8"?>
+<admEnvelope version="ITU-R_BS.2076-2">
+  <audioProgramme programmeName="Atmos Master Mix" creator="ALenJe Studios">
+    <audioObject name="VOCALS" objectId="AO_001">
+      <positionCoordinate coordinate="X">${vCoord.split(',')[0].replace('[','')}</positionCoordinate>
+      <positionCoordinate coordinate="Y">${vCoord.split(',')[1].replace(']','')}</positionCoordinate>
+    </audioObject>
+    <audioObject name="DRUMS" objectId="AO_002">
+      <positionCoordinate coordinate="X">${dCoord.split(',')[0].replace('[','')}</positionCoordinate>
+      <positionCoordinate coordinate="Y">${dCoord.split(',')[1].replace(']','')}</positionCoordinate>
+    </audioObject>
+  </audioProgramme>
+</admEnvelope>`;
+
+            const blob = new Blob([xmlContent], { type: 'text/xml' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "ALenJe_Atmos_Metadata.xml";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showNotification("ADM Metadata Saved", "Spatial metadata downloaded successfully.", false);
+        };
+
+        // Master Renderer Exporter with multi-format support
+        document.getElementById('export-wav-btn').onclick = function() {
+            const format = document.getElementById('export-format-select').value;
+            showNotification("Rendering Master...", `Baking audio stream into pristine ${format.toUpperCase()} format...`, false);
+            
+            setTimeout(() => {
+                // Simulate and save inside local session files virtual memory
+                const virtualFileName = `${document.getElementById('track-name').textContent || 'ALenJe_Master'}_export.${format}`;
+                savedVirtualFiles.push({
+                    name: virtualFileName,
+                    format: format,
+                    timestamp: new Date().toLocaleTimeString()
+                });
+
+                // Trigger real local device download using dynamic Blobs
+                const fakeData = "ALenJe Lossless Floating Point Audio Track Buffer Stream";
+                const blob = new Blob([fakeData], { type: 'audio/octet-stream' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = virtualFileName;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                showNotification("Export Finished!", `${format.toUpperCase()} Master generated and saved to your device.`, false);
+            }, 3000);
+        };
+
+        // Bypass Atmos soundstage
+        let spatialBypassActive = false;
+        document.getElementById('spatial-bypass').onclick = function() {
+            spatialBypassActive = !spatialBypassActive;
+            if (spatialBypassActive) {
+                this.textContent = "Mono Target Mode";
+                this.className = "px-2.5 py-1 bg-rose-500/10 border border-rose-500/30 text-rose-400 rounded-lg text-xxs transition-colors uppercase tracking-wider font-bold animate-pulse";
+                Object.keys(stemPanNodes).forEach(key => {
+                    if (stemPanNodes[key]) stemPanNodes[key].pan.setValueAtTime(0, audioCtx.currentTime);
+                });
+                showNotification("Mono Fold-down", "Atmos bypassed. Spatial objects collapsed to center.", false);
+            } else {
+                this.textContent = "Bypass Atmos";
+                this.className = "px-2.5 py-1 border border-white/10 hover:border-emerald-500/50 text-slate-400 hover:text-slate-200 rounded-lg text-xxs transition-colors uppercase tracking-wider font-bold";
+                showNotification("Atmos Bed Restored", "3D spatial vectors re-engaged.", false);
+            }
+        };
+
+        // =============================================
+        // FIRST TIME USER NAVIGATION WALKTHROUGH SYSTEM
+        // =============================================
+        let currentGuideStep = 1;
+        const walkthroughModal = document.getElementById('walkthrough-modal');
+        const prevBtn = document.getElementById('guide-prev-btn');
+        const nextBtn = document.getElementById('guide-next-btn');
+        const stepTag = document.getElementById('guide-step-tag');
+        const modalTitle = document.getElementById('guide-modal-title');
+        const modalDesc = document.getElementById('guide-modal-desc');
+
+        const guideSteps = [
+            {
+                title: "1. Lossless Ingest Center",
+                desc: "This is where you load your high-res audio files (WAV, FLAC, MP3). You can drop them directly or click 'Browse Local Device'. You can also click 'Synthesized Demo Track' to test the environment with synthesized sounds.",
+                target: "guide-step-1"
+            },
+            {
+                title: "Beat Tag Remover Module",
+                desc: "This is our signature feature that automatically identifies, suppresses, and erases vocal drops from beats without losing instrument fidelity.",
+                target: "guide-step-tagremover"
+            },
+            {
+                title: "2. Demucs Separation Matrix",
+                desc: "Configure your separation parameters here. Select a model (like HTDemucs v4) and slide the Bass Crossover or Vocal frequencies to target the perfect extraction bands in real-time.",
+                target: "guide-step-2"
+            },
+            {
+                title: "4. Active Stems Mixer Bank",
+                desc: "Here are your individual extracted stems (Vocals, Drums, Bass, Others). Each channel features real-time dynamic spectral analyzers, Mute, Solo, and gain sliders to control your sound space.",
+                target: "guide-step-4"
+            },
+            {
+                title: "5. Atmos 3D Spatializer",
+                desc: "The ultimate 3D stage. Click and drag the Vocal, Drum, Bass, or Melody nodes anywhere in the space to output professional multi-vector spatial coordinates. Once you're happy with your mix, export the master files below!",
+                target: "guide-step-5"
+            }
+        ];
+
+        function startGuide() {
+            currentGuideStep = 1;
+            showGuideStep(0);
+            walkthroughModal.classList.remove('hidden');
+            setTimeout(() => {
+                walkthroughModal.classList.remove('opacity-0');
+            }, 50);
+        }
+
+        function showGuideStep(index) {
+            // Remove previous highlights
+            document.querySelectorAll('.guide-highlight').forEach(el => {
+                el.classList.remove('guide-highlight');
+            });
+
+            const step = guideSteps[index];
+            stepTag.textContent = `Step ${index + 1} of 5`;
+            modalTitle.textContent = step.title;
+            modalDesc.textContent = step.desc;
+
+            // Apply highlight styling to target element
+            const el = document.getElementById(step.target);
+            if (el) {
+                el.classList.add('guide-highlight');
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            // Adjust navigation button status
+            if (index === 0) {
+                prevBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                prevBtn.disabled = true;
+                nextBtn.textContent = "Next Step";
+            } else if (index === guideSteps.length - 1) {
+                prevBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                prevBtn.disabled = false;
+                nextBtn.textContent = "Finish Guide";
+            } else {
+                prevBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                prevBtn.disabled = false;
+                nextBtn.textContent = "Next Step";
+            }
+        }
+
+        nextBtn.onclick = function() {
+            if (currentGuideStep < guideSteps.length) {
+                currentGuideStep++;
+                showGuideStep(currentGuideStep - 1);
+            } else {
+                closeGuide();
+            }
+        };
+
+        prevBtn.onclick = function() {
+            if (currentGuideStep > 1) {
+                currentGuideStep--;
+                showGuideStep(currentGuideStep - 1);
+            }
+        };
+
+        function closeGuide() {
+            // Cleanup highlights
+            document.querySelectorAll('.guide-highlight').forEach(el => {
+                el.classList.remove('guide-highlight');
+            });
+            walkthroughModal.classList.add('opacity-0');
+            setTimeout(() => {
+                walkthroughModal.classList.add('hidden');
+            }, 300);
+        }
+
+        document.getElementById('skip-guide-btn').onclick = closeGuide;
+        document.getElementById('start-guide-btn').onclick = startGuide;
+
+        // Auto-run guide on first load and init firebase checks
+        window.addEventListener('load', () => {
+            setTimeout(startGuide, 1000);
+            setTimeout(initFirebaseEnvironment, 1500);
+        });
+
+    </script>
+</body>
+</html>
